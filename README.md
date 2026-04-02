@@ -16,7 +16,7 @@ Based on the [Keel Agent Workflows](https://confluence.walmart.com/pages/viewpag
 | **Metric Calculation** | Knows how ATC, CTR, CPTS, GMV, SOV, and Activations are computed |
 | **Query Generation** | Writes accurate, cost-conscious BigQuery SQL |
 | **Pattern Recognition** | Identifies WoW trends, drops, spikes, and anomalies |
-| **Multi-Table Analysis** | Joins across all 4 SCS tables to answer layered questions |
+| **Multi-Table Analysis** | Joins across all 6 SCS tables to answer layered questions |
 | **Insight Generation** | Goes beyond data to provide actionable business recommendations |
 
 ---
@@ -38,7 +38,11 @@ keel-analytics/
     ├── message_shareout_context.md                      ← HPOV structure, card benchmarks, seasonal calendar,
     │                                                         message tiers, SIG, FY27 owners (6 share-out decks)
     ├── homepage_buddy_knowledge.md                      ← Homepage Buddy capabilities, formulas, delegation pattern
-    └── agentic_workflow.md                              ← 8-step protocol, self-check lists, FY27 roadmap
+    ├── agentic_workflow.md                              ← 8-step protocol, self-check lists, FY27 roadmap
+    ├── message_tiering.md                               ← Full tiering framework: 4 factors, decision trees,
+    │                                                         card SOV, all 100+ named messages + tier outcomes
+    └── msp_training.md                                  ← MSP process: message types, M0–M4 hierarchy,
+                                                              MMUI flow, ATF eligibility, personas, timeline
 ```
 
 ---
@@ -66,16 +70,15 @@ All tables live in: **`wmt-site-content-strategy.scs_production`**
 |--------|---------|
 | **CTR** | `Clicks ÷ Viewed Impressions` |
 | **CPTS** | `(Clicks ÷ HP Sessions) × 1,000` |
-| **ATC Rate** | `ATC Clicks ÷ Viewed Impressions` |
+| **ATC Rate** | `(ATC Clicks ÷ Viewed Impressions) × 1,000` |
 | **GMV Per Impression** | `GMV ÷ Viewed Impressions` |
-| **HP Visitation Rate** | `hp_session_count ÷ total_session_count` |
-| **SOV** | `Asset Impressions ÷ Total HP Impressions` |
+| **GMV Per Click** | `GMV ÷ Clicks` |
 
 ---
 
 ## 💡 Example Questions Keel Can Answer
 
-1. *"What is the ATC rate for messages in CZ33 last week by platform?"*
+1. *"What is the ATC rate for messages in CZ3 last week by platform?"*
 2. *"Why did ATC drop yesterday? Which modules were the main drivers?"*
 3. *"What's the SOV trend for the HOME SBU over the last 4 weeks?"*
 4. *"Which carousel items drove the most GMV last week?"*
