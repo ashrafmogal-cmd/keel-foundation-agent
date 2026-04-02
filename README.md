@@ -41,8 +41,13 @@ keel-analytics/
     ├── agentic_workflow.md                              ← 8-step protocol, self-check lists, FY27 roadmap
     ├── message_tiering.md                               ← Full tiering framework: 4 factors, decision trees,
     │                                                         card SOV, all 100+ named messages + tier outcomes
-    └── msp_training.md                                  ← MSP process: message types, M0–M4 hierarchy,
-                                                              MMUI flow, ATF eligibility, personas, timeline
+    ├── msp_training.md                                  ← MSP process: message types, M0–M4 hierarchy,
+    │                                                         MMUI flow, ATF eligibility, personas, timeline
+    ├── hpov_shareout_nov_dec_jan_2026.md                ← 6 weekly share-out decks (WK42 Nov 2025 – WK01 FY27):
+    │                                                         card rotations, AE2/Cyber Monday, holiday takedown,
+    │                                                         NYNY, Valentine’s Day, Super Bowl, brand launches
+    └── sig_playbook.md                                  ← SIG Message Playbook: eligibility, asset requirements,
+                                                              ATF/BTF strategy, P13N, 10-step process, active themes
 ```
 
 ---
@@ -84,7 +89,12 @@ All tables live in: **`wmt-site-content-strategy.scs_production`**
 4. *"Which carousel items drove the most GMV last week?"*
 5. *"How are GMF activations trending WoW, and which modules are contributing?"*
 6. *"Compare CTR between personalized vs default content on Android"*
-7. *"What is our HP visitation rate by traffic source this week?"*
+7. *"What tier is Valentine's Day and what placement does it get?"*
+8. *"What is the holiday gifting takedown time on Dec 24?"*
+9. *"What are the SIG eligibility requirements and what assets does the parent message need?"*
+10. *"What messages were live in WK50 (Jan 10-16) and what was the approved rotation?"*
+11. *"What CTR benchmark should I use for Card 5, and does it exclude deals events?"*
+12. *"What's the GMV per click for the Game Time module last Super Bowl week?"*
 
 ---
 
