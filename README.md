@@ -24,14 +24,16 @@ Based on the [Keel Agent Workflows](https://confluence.walmart.com/pages/viewpag
 
 ```
 keel-analytics/
-├── README.md                          ← You are here
+├── README.md                                            ← You are here
 ├── datasets/
-│   ├── hp_summary_asset.md            ← Asset-level performance table (~53.4 GB)
-│   ├── hp_session.md                  ← Session-level denominator table (~10 MB)
-│   ├── sov_hp_carousel_content.md     ← Share-of-Voice carousel table (~13.6 GB)
-│   ├── item_hp_scs.md                 ← Item/product-level table (~685 GB) 🔴
-│   └── metrics_definitions.md         ← Full metrics glossary & sample queries
-└── queries/                           ← (coming soon) saved query library
+│   ├── hp_summary_asset.md                              ← Asset-level performance table (~53.4 GB)
+│   ├── hp_session.md                                    ← Session-level denominator table (~10 MB)
+│   ├── sov_hp_carousel_content.md                       ← Share-of-Voice carousel table (~13.6 GB)
+│   ├── item_hp_scs.md                                   ← Item/product-level table (~685 GB) 🔴
+│   └── metrics_definitions.md                           ← Full metrics glossary + sample queries
+└── business_context/
+    └── message_shareout_context.md                      ← HPOV structure, card benchmarks, seasonal calendar,
+                                                          message tiers, SIG structure, FY27 owners (from 6 share-out decks)
 ```
 
 ---
@@ -124,6 +126,9 @@ User Question
 - [x] Dataset schema documentation (all 4 tables)
 - [x] Metrics definitions & glossary
 - [x] Sample query library
+- [x] Business context from 6 Message Share-Out decks (WK2–WK13 FY27)
+- [x] HPOV card structure, CTR benchmarks, message tiers, SIG structure
+- [x] FY27 seasonal calendar (Feb–May)
 - [ ] CVP dataset integration
 - [ ] Traffic Sense integration
 - [ ] Automated WoW report generation
