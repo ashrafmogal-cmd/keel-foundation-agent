@@ -1,4 +1,4 @@
-# 🧠 Keel Analytics — Project README
+# 🧠 Keel Foundation Agent — Project README
 
 > **Keel** is the brain agent powering homepage analytics intelligence at Walmart.  
 > It understands the Homepage Performance ecosystem end-to-end and can answer complex analytical questions, build queries, explain metrics, and surface actionable insights — all grounded in real BigQuery data.
