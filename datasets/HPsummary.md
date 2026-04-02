@@ -1,11 +1,12 @@
-# 📊 Dataset: `HPsummary`
+# ⚠️ Dataset: `HPsummary` — LEGACY TABLE
 
 **Project:** `wmt-site-content-strategy`  
 **Dataset:** `scs_production`  
 **Full Reference:** `wmt-site-content-strategy.scs_production.HPsummary`  
-**Keel Role:** The **primary reporting table** for homepage analytics. Richer than `hp_summary_asset` — includes extra date dimensions, activation metrics, and a critical `Content_Type` filter. Powering the Homepage Buddy agent and all HP performance dashboards.
+**Status:** ⚠️ **LEGACY — The team has moved away from this table. Use `hp_summary_asset` instead.**  
+**Keel Role:** Historical reference only. `hp_summary_asset` is the current dashboard-powering table.
 
-> ⚠️ **CRITICAL MANDATORY FILTER**: Always apply `Content_Type = 'Merch'` — without this, data will be incorrect.
+> ⛔ **Do NOT default to this table for new analysis.** This was the older reporting layer. The active dashboard, WBR, HP Performance, Module Performance, Bubble Charts, and Bar Charts now run off `hp_summary_asset`.
 
 ---
 

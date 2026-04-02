@@ -48,8 +48,8 @@ All tables live in: **`wmt-site-content-strategy.scs_production`**
 
 | Table | Size | Grain | Primary Use |
 |-------|------|-------|------------|
-| [`HPsummary`](./datasets/HPsummary.md) | TBD | Asset × Date × Platform | **PRIMARY** — WBR, CTR, GMV, Activations (requires `Content_Type='Merch'`) |
-| [`hp_summary_asset`](./datasets/hp_summary_asset.md) | ~53.4 GB | Asset × Date × Platform | CTR, ATC, GMV, Activations (raw) |
+| [`hp_summary_asset`](./datasets/hp_summary_asset.md) | ~53.4 GB | Asset × Date × Platform | ✅ **PRIMARY DASHBOARD TABLE** — WBR, CTR, GMV, Activations |
+| [`HPsummary`](./datasets/HPsummary.md) | TBD | Asset × Date × Platform | ⚠️ LEGACY — team has moved away from this, use hp_summary_asset |
 | [`hp_session`](./datasets/hp_session.md) | ~10 MB | Platform × Date × Traffic Source | Session denominator for CPTS |
 | [`sov_hp_carousel_content`](./datasets/sov_hp_carousel_content.md) | ~13.6 GB | Message × Carousel × Date | Share of Voice analysis |
 | [`item_hp_scs`](./datasets/item_hp_scs.md) | ~685 GB | Item × Module × Date | Product-level attribution 🔴 |

@@ -1,9 +1,10 @@
-# 📊 Dataset: `hp_summary_asset`
+# 📊 Dataset: `hp_summary_asset` — PRIMARY DASHBOARD TABLE ✅
 
 **Project:** `wmt-site-content-strategy`  
 **Dataset:** `scs_production`  
 **Full Reference:** `wmt-site-content-strategy.scs_production.hp_summary_asset`  
 **Size:** ~53.4 GB ⚠️  
+**Status:** ✅ **ACTIVE — This is the table powering the live HP dashboards (WBR, HP Performance, Module Performance, Bubble Charts, Bar Charts). Always prefer this over HPsummary.**  
 **Keel Role:** Primary asset-level performance table — the main source for CTR, ATC, GMV, and activation metrics by homepage module.
 
 ---

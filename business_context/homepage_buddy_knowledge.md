@@ -8,7 +8,9 @@
 
 ## 🧭 What Homepage Buddy Does
 
-Homepage Buddy is a specialized analytics agent for the **`HPsummary` table** that:
+Homepage Buddy is a specialized analytics agent originally built around the **`HPsummary` table** — however, **the team has since moved to `hp_summary_asset` as the primary dashboard table**. When delegating to Homepage Buddy, confirm which table it is querying and override to `hp_summary_asset` if needed.
+
+> ⚠️ **Table Correction:** `hp_summary_asset` is now the live dashboard table. `HPsummary` is legacy. Keel should default all new analysis to `hp_summary_asset`.
 - Answers HP performance questions in plain English
 - Generates Excel tables saved to `~/Desktop/clickfather/`
 - Creates PowerPoint charts with Walmart blue styling
