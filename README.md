@@ -1,7 +1,8 @@
 # 🧠 Keel Foundation Agent — Project README
 
 > **Keel** is the brain agent powering homepage analytics intelligence at Walmart.  
-> It understands the Homepage Performance ecosystem end-to-end and can answer complex analytical questions, build queries, explain metrics, and surface actionable insights — all grounded in real BigQuery data.
+> Defined in the FY27 Analytics Roadmap as: *"A site merchandising analytics expert that uses agentic workflows to deliver trusted, on-demand insights grounded in data and business context."*  
+> Keel is a **Q1 FY27 initiative** — the foundation layer for all self-service analytics agents to follow.
 
 ---
 
@@ -26,18 +27,18 @@ Based on the [Keel Agent Workflows](https://confluence.walmart.com/pages/viewpag
 keel-analytics/
 ├── README.md                                            ← You are here
 ├── datasets/
-│   ├── HPsummary.md                                     ← PRIMARY reporting table (Content_Type='Merch' mandatory)
-│   ├── hp_summary_asset.md                              ← Asset-level performance table (~53.4 GB)
+│   ├── hp_summary_asset.md                              ← ✅ PRIMARY dashboard table (~53.4 GB)
+│   ├── HPsummary.md                                     ← ⚠️ LEGACY table (moved away from)
 │   ├── hp_session.md                                    ← Session-level denominator table (~10 MB)
 │   ├── sov_hp_carousel_content.md                       ← Share-of-Voice carousel table (~13.6 GB)
 │   ├── item_hp_scs.md                                   ← Item/product-level table (~685 GB) 🔴
-│   ├── CVPsummary.md                                    ← CVP program table (2.32B rows, ~812 GB) 🔴🔴
+│   ├── CVPsummary.md                                    ← CVP program table (2.32B rows) 🔴🔴
 │   └── metrics_definitions.md                           ← Full metrics glossary + sample queries
 └── business_context/
     ├── message_shareout_context.md                      ← HPOV structure, card benchmarks, seasonal calendar,
     │                                                         message tiers, SIG, FY27 owners (6 share-out decks)
-    └── homepage_buddy_knowledge.md                      ← Homepage Buddy agent capabilities, HPsummary formulas,
-                                                              output conventions, Keel delegation pattern
+    ├── homepage_buddy_knowledge.md                      ← Homepage Buddy capabilities, formulas, delegation pattern
+    └── agentic_workflow.md                              ← 8-step protocol, self-check lists, FY27 roadmap
 ```
 
 ---
@@ -84,17 +85,26 @@ All tables live in: **`wmt-site-content-strategy.scs_production`**
 
 ---
 
-## 🧩 Keel's 7-Step Framework
+## 🔄 Keel's 8-Step Agentic Workflow
 
-*(From the Keel Agent Workflows document)*
+*(From FY27 Analytics Roadmap, Slide 2)*
 
-1. **Decompose** — Break the user's question into actionable sub-tasks
-2. **Knowledge Resource Planning** — Identify relevant tables, metrics, and docs
-3. **Knowledge Retrieval** — Apply business context (glossary, metric logic, attribution rules)
-4. **Execution** — Generate and run accurate BigQuery SQL
-5. **Reasoning** — Synthesize results into insights aligned with business expectations
-6. **Evaluation** — Score response completeness; identify gaps
-7. **Reflection & Refinement** — Learn from feedback; improve over time
+Every query flows through all 8 steps — non-negotiable:
+
+| Step | Name | What It Does |
+|------|------|--------------|
+| 1 | **Decompose Tasks** | Break question into metric, table, date, platform, grain, comparison |
+| 2 | **Plan Knowledge Sources** | Map to the right table(s) before touching data |
+| 3 | **Retrieve Knowledge** | Pull schema, benchmarks, seasonal context, attribution rules |
+| 4 | **Execute** | Write + run cost-conscious BigQuery SQL with all mandatory filters |
+| 5 | **Reasoning** | Interpret results in business terms with benchmark context |
+| 6 | **Evaluate** | Self-check — numbers plausible? filters applied? senior analyst would trust this? |
+| 7 | **Reflect** | Did I answer the RIGHT question? What's missing? Anticipate follow-up. |
+| 8 | **Refine** | Fix, improve, add caveats — never output what you wouldn't stake credibility on |
+
+**→ Output: Trusted. On-demand. Grounded in data and business context.**
+
+Full detail: [`business_context/agentic_workflow.md`](./business_context/agentic_workflow.md)
 
 ---
 
@@ -127,21 +137,20 @@ User Question
 
 ---
 
-## 🛣️ Roadmap
+## 🚀 FY27 Roadmap — Keel's Place
 
-- [x] Dataset schema documentation (all 6 tables incl. HPsummary + CVPsummary)
-- [x] Metrics definitions & glossary
-- [x] Sample query library
-- [x] Business context from 6 Message Share-Out decks (WK2–WK13 FY27)
-- [x] HPOV card structure, CTR benchmarks, message tiers, SIG structure
-- [x] FY27 seasonal calendar (Feb–May)
-- [x] Homepage Buddy agent knowledge (capabilities, formulas, delegation pattern)
-- [x] CVP program funnel and analysis patterns
-- [ ] CVP dataset integration
-- [ ] Traffic Sense integration
-- [ ] Automated WoW report generation
-- [ ] SBU-level SOV analysis with NLP/fuzzy matching for cross-category messages
-- [ ] Item-level GMF activation drill-down
+| Quarter | Agent/Initiative | Status |
+|---------|-----------------|--------|
+| **Q1** | **Homepage Keel Agent** — Foundation agent for homepage domain with semantic data layer | ✅ **IN PROGRESS** |
+| **Q2** | Homepage Buddy Chatbot — Self-service chatbot powered by Keel | 🔜 |
+| **Q2** | Msg Performance Keel Agent — Foundation agent for message domain | 🔜 |
+| **Q3** | C&E Keel Agent, Message Performance Chatbot, Event Recap Agent | 🔜 |
+| **Q3** | CVP Brand Audit Agent, Data Anomaly Detection Agent, C&E Dashboard | 🔜 |
+| **Q4** | TrafficSense Chatbot, P13N Explainability, Feature Launch Decision Framework | 🔜 |
+
+**Business Outcome:** Eliminate ad-hoc analytics requests → free up analytics resources for strategic work.
+
+**Next Major Milestone:** Evaluation phase — Keel answers a test set of questions, analyst evaluates accuracy of answers + SQL + reasoning, feedback loop improves trust until answers can be shared directly with stakeholders without human QA.
 
 ---
 
