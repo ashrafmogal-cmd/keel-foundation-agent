@@ -46,8 +46,11 @@ keel-analytics/
     ├── hpov_shareout_nov_dec_jan_2026.md                ← 6 weekly share-out decks (WK42 Nov 2025 – WK01 FY27):
     │                                                         card rotations, AE2/Cyber Monday, holiday takedown,
     │                                                         NYNY, Valentine’s Day, Super Bowl, brand launches
-    └── sig_playbook.md                                  ← SIG Message Playbook: eligibility, asset requirements,
-                                                              ATF/BTF strategy, P13N, 10-step process, active themes
+    ├── sig_playbook.md                                  ← SIG Message Playbook: eligibility, asset requirements,
+    │                                                         ATF/BTF strategy, P13N, 10-step process, active themes
+    └── reporting_conventions.md                         ← ⚠️ CRITICAL: Fiscal week (Sat–Fri), WBR windows
+                                                              (Std: Sat–Tue | Msg: Mon–Sun), hp_module_name +
+                                                              moduletype mappings for HPOV & SIG, SQL filters
 ```
 
 ---
