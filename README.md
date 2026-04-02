@@ -26,14 +26,18 @@ Based on the [Keel Agent Workflows](https://confluence.walmart.com/pages/viewpag
 keel-analytics/
 ├── README.md                                            ← You are here
 ├── datasets/
+│   ├── HPsummary.md                                     ← PRIMARY reporting table (Content_Type='Merch' mandatory)
 │   ├── hp_summary_asset.md                              ← Asset-level performance table (~53.4 GB)
 │   ├── hp_session.md                                    ← Session-level denominator table (~10 MB)
 │   ├── sov_hp_carousel_content.md                       ← Share-of-Voice carousel table (~13.6 GB)
 │   ├── item_hp_scs.md                                   ← Item/product-level table (~685 GB) 🔴
+│   ├── CVPsummary.md                                    ← CVP program table (2.32B rows, ~812 GB) 🔴🔴
 │   └── metrics_definitions.md                           ← Full metrics glossary + sample queries
 └── business_context/
-    └── message_shareout_context.md                      ← HPOV structure, card benchmarks, seasonal calendar,
-                                                          message tiers, SIG structure, FY27 owners (from 6 share-out decks)
+    ├── message_shareout_context.md                      ← HPOV structure, card benchmarks, seasonal calendar,
+    │                                                         message tiers, SIG, FY27 owners (6 share-out decks)
+    └── homepage_buddy_knowledge.md                      ← Homepage Buddy agent capabilities, HPsummary formulas,
+                                                              output conventions, Keel delegation pattern
 ```
 
 ---
@@ -44,10 +48,12 @@ All tables live in: **`wmt-site-content-strategy.scs_production`**
 
 | Table | Size | Grain | Primary Use |
 |-------|------|-------|------------|
-| [`hp_summary_asset`](./datasets/hp_summary_asset.md) | ~53.4 GB | Asset × Date × Platform | CTR, ATC, GMV, Activations |
+| [`HPsummary`](./datasets/HPsummary.md) | TBD | Asset × Date × Platform | **PRIMARY** — WBR, CTR, GMV, Activations (requires `Content_Type='Merch'`) |
+| [`hp_summary_asset`](./datasets/hp_summary_asset.md) | ~53.4 GB | Asset × Date × Platform | CTR, ATC, GMV, Activations (raw) |
 | [`hp_session`](./datasets/hp_session.md) | ~10 MB | Platform × Date × Traffic Source | Session denominator for CPTS |
 | [`sov_hp_carousel_content`](./datasets/sov_hp_carousel_content.md) | ~13.6 GB | Message × Carousel × Date | Share of Voice analysis |
 | [`item_hp_scs`](./datasets/item_hp_scs.md) | ~685 GB | Item × Module × Date | Product-level attribution 🔴 |
+| [`CVPsummary`](./datasets/CVPsummary.md) | ~812 GB/scan | Item × Module × Date | CVP program enrollment & outcomes 🔴🔴 |
 
 > ⚠️ **Cost Warning:** Always filter `item_hp_scs` by `event_dt`. A full scan = hundreds of dollars.
 
@@ -123,12 +129,14 @@ User Question
 
 ## 🛣️ Roadmap
 
-- [x] Dataset schema documentation (all 4 tables)
+- [x] Dataset schema documentation (all 6 tables incl. HPsummary + CVPsummary)
 - [x] Metrics definitions & glossary
 - [x] Sample query library
 - [x] Business context from 6 Message Share-Out decks (WK2–WK13 FY27)
 - [x] HPOV card structure, CTR benchmarks, message tiers, SIG structure
 - [x] FY27 seasonal calendar (Feb–May)
+- [x] Homepage Buddy agent knowledge (capabilities, formulas, delegation pattern)
+- [x] CVP program funnel and analysis patterns
 - [ ] CVP dataset integration
 - [ ] Traffic Sense integration
 - [ ] Automated WoW report generation
