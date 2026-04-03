@@ -55,6 +55,12 @@ keel-analytics/
                                                               W+ member states & targeting (soft/hard/override),
                                                               OST CTR=3.41-4.6%, Amend CTR=7.73% (highest ATF),
                                                               Timers, ATF CTR hierarchy, module discovery query
+└── sitewide/
+    └── ecomm_hp_intgtn_summary.md                          ← 🌐 Sitewide context table (ecomm_traffic dataset):
+                                                              HP page views, sessions, pages-per-session,
+                                                              HP visitation rate vs total site. 5 saved query
+                                                              patterns (date range, rolling, WoW, schema discovery).
+                                                              Use to benchmark HP vs sitewide traffic.
 ```
 
 ---
@@ -73,6 +79,12 @@ All tables live in: **`wmt-site-content-strategy.scs_production`**
 | [`CVPsummary`](./datasets/CVPsummary.md) | ~812 GB/scan | Item × Module × Date | CVP program enrollment & outcomes 🔴🔴 |
 
 > ⚠️ **Cost Warning:** Always filter `item_hp_scs` by `event_dt`. A full scan = hundreds of dollars.
+
+### 🌐 Sitewide Context Table (ecomm_traffic dataset)
+
+| Table | Dataset | Grain | Primary Use |
+|-------|---------|-------|-------------|
+| [`ecomm_hp_intgtn_summary`](./sitewide/ecomm_hp_intgtn_summary.md) | `ecomm_traffic` | Traffic Source × Date | HP page views, sessions, sitewide comparison |
 
 ---
 
