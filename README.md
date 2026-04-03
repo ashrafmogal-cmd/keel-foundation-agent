@@ -48,9 +48,13 @@ keel-analytics/
     │                                                         NYNY, Valentine’s Day, Super Bowl, brand launches
     ├── sig_playbook.md                                  ← SIG Message Playbook: eligibility, asset requirements,
     │                                                         ATF/BTF strategy, P13N, 10-step process, active themes
-    └── reporting_conventions.md                         ← ⚠️ CRITICAL: Fiscal week (Sat–Fri), WBR windows
-                                                              (Std: Sat–Tue | Msg: Mon–Sun), hp_module_name +
-                                                              moduletype mappings for HPOV & SIG, SQL filters
+    ├── reporting_conventions.md                         ← ⚠️ CRITICAL: Fiscal week (Sat–Fri), WBR windows
+    │                                                         (Std: Sat–Tue | Msg: Mon–Sun), hp_module_name +
+    │                                                         moduletype mappings for HPOV & SIG, SQL filters
+    └── wmc_wplus_ost_amend.md                           ← WMC ads (Cards 2&3, ~92% sold), merch vs ads P&L,
+                                                              W+ member states & targeting (soft/hard/override),
+                                                              OST CTR=3.41-4.6%, Amend CTR=7.73% (highest ATF),
+                                                              Timers, ATF CTR hierarchy, module discovery query
 ```
 
 ---
