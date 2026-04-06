@@ -213,4 +213,24 @@ moduletype = 'PrismScrollableItemGrid'
 
 ---
 
+---
+
+## ATF vs BTF Definition (Confirmed by Business Owner)
+
+**Above the Fold (ATF):** content_zone IN ('contentZone1','contentZone2','contentZone3','contentZone4','contentZone5','contentZone6')
+**Below the Fold (BTF):** content_zone NOT IN the above (contentZone7 and higher)
+
+**⚠️ DO NOT USE `atf_flag` column for ATF/BTF filtering.**
+Reason: atf_flag has been found to tag ALL modules (including HPOV AutoScroll Cards) as 'BTF'. It is unreliable.
+The correct approach is to filter by content_zone values.
+
+**SQL Pattern — ATF filter:**
+```sql
+WHERE content_zone IN ('contentZone1','contentZone2','contentZone3','contentZone4','contentZone5','contentZone6')
+```
+
+**Source:** Confirmed by business owner during Keel Q&A session, April 2026.
+
+---
+
 *Last updated by Keel Agent | Confirmed by: Ashraf (site content strategy team)*

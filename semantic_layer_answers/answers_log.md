@@ -39,4 +39,11 @@ Used for learning, pattern recognition, and stakeholder reference.
   Use known module names/moduletype values for ATF filtering instead.
   AutoScroll Cards 6–10 exist in data (anomaly — should only be Cards 1-5).
 
+**⚠️ CORRECTION (User Feedback):**
+- ATF definition: Use content_zone field. contentZone1–contentZone6 = ATF. contentZone7+ = BTF.
+- Do NOT use atf_flag column for ATF/BTF filtering — unreliable (tags all modules as BTF).
+- Correct SQL filter: WHERE content_zone IN ('contentZone1','contentZone2','contentZone3','contentZone4','contentZone5','contentZone6')
+- Excel: Keep formatting basic — no colors, simple table only.
+- Metrics to report: GMV + GMV/click only (no CTR, impressions, clicks unless specifically asked).
+
 ---

@@ -35,7 +35,7 @@ One row = one **homepage asset/module** sliced by:
 | 9 | `message_id` | STRING | Unique ID for the content message | UUID or `NA` |
 | 10 | `modulename` | STRING | Full name/label of the HP module | `HP Redesign (CZ33): Adjustable Banner...` |
 | 11 | `moduletype` | STRING | Technical type of the module | `AdjustableBanner`, `PrismHeroCarousel` |
-| 12 | `content_zone` | STRING | Content zone on the homepage | `contentZone36`, `contentZone33` |
+| 12 | `content_zone` | STRING | Content zone on the homepage. **ATF = contentZone1 through contentZone6. BTF = contentZone7+.** Use this for ATF/BTF filtering — NOT atf_flag. | `contentZone1` through `contentZone80` |
 | 13 | `container_id` | STRING | Container ID within content zone | `NA` or specific container ID |
 | 14 | `content_served_by` | STRING | Serving engine | `cxtools` (editorial), `p13n` (personalization), `NA` |
 | 15 | `asset_heading` | STRING | Display heading text of the asset | `"Luce tu estilo por menos"` |
@@ -52,7 +52,7 @@ One row = one **homepage asset/module** sliced by:
 | 26 | `m2_nm` | STRING | Product taxonomy level 2 | Subcategory name |
 | 27 | `m3_nm` | STRING | Product taxonomy level 3 | Segment name |
 | 28 | `m4_nm` | STRING | Product taxonomy level 4 (most granular) | Item type |
-| 29 | `atf_flag` | STRING | Above/Below the fold indicator | `ATF` (above fold), `BTF` (below fold) |
+| 29 | `atf_flag` | STRING | ⚠️ UNRELIABLE — do NOT use for ATF filtering. Found to tag all modules as 'BTF' even HPOV cards. Use `content_zone` instead. | `BTF`, `N/A` (ATF modules show as N/A, not 'ATF') |
 | 30 | `atf_location` | STRING | Specific fold position label | `BTF`, `HeroAutoScroll`, `ATF` |
 | 31 | `carousel_name` | STRING | Carousel name if in a carousel | `Not Carousel`, or carousel name |
 | 32 | `module_group` | STRING | High-level grouping of module | `Content`, `Commerce` |
