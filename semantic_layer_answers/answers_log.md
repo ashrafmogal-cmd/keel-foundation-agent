@@ -134,3 +134,32 @@ Used for learning, pattern recognition, and stakeholder reference.
 - W-10: Partial (Apr 4, 2026 only)
 
 ---
+
+## Q5 — HPOV Card 1 W+ Impression Scenario (70% Shift)
+**Asked:** If 70% of HPOV impressions in Card 1 shift to W+ messaging, how many impressions and % of HPOV impressions go to W+?
+**Table:** wmt-site-content-strategy.scs_production.hp_summary_asset
+**Type:** Scenario / projection analysis (not a raw data pull)
+**Reference Period:** W-09 (Mar 28-Apr 3 2026) + 4-week window (Mar 7-Apr 3 2026)
+
+**Raw Data:**
+- Card 1 impressions (W-09): 165,653,671
+- Total HPOV impressions (W-09): 453,753,261
+- Card 1 SOV within HPOV: 36.5% (aligns with knowledge base ~35%)
+
+**Scenario Math (70% of Card 1 to W+):**
+- W+ impressions (W-09): 165,653,671 x 0.70 = 115,957,570
+- W+ impressions (4-week): 636,935,262 x 0.70 = 445,854,683
+- W+ daily average: ~15,923,381 impressions/day
+- W+ as % of total HPOV: 25.6% (W-09) / 25.9% (4-week) — very consistent
+
+**Key Insights:**
+- This scenario = 116M W+ impressions/week vs W+ Week event benchmark of 55M (2x higher volume but lower SOV: 25.6% vs 47%)
+- Card 1 SOV (36.5%) x 70% = 25.6% of HPOV — mathematically clean
+- Consistent across W-09 and 4-week periods = stable base for planning
+
+**Methodology Notes:**
+- No content_type Merch filter applied — impression capacity question, not a CTR/GMV metric
+- Card 1 has no WMC — filter would not change Card 1 numbers but would distort total HPOV denominator
+- Scenario assumes static 70% allocation; P13N algo distributes dynamically in practice
+
+---
