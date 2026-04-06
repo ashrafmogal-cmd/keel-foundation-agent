@@ -73,6 +73,16 @@ One row = one **homepage asset/module** sliced by:
 
 ---
 
+## content_zone — Desktop ATF Definition
+- Content zone format: camelCase string, e.g. `contentZone3`, `contentZone7`, `contentZone27`
+- **Desktop ATF = contentZone7 through contentZone27** (business rule)
+- atf_flag column is NOT reliable for Desktop (always = 'BTF') — use zone number instead
+- SQL filter: `SAFE_CAST(REGEXP_EXTRACT(content_zone, r'\d+') AS INT64) BETWEEN 7 AND 27`
+- HPOV primary zone on Desktop: contentZone3 (NOT ATF)
+- SIG primary zones on Desktop: contentZone41, contentZone42 (NOT ATF)
+
+---
+
 ## 🔑 Key Derived Metrics from this Table
 
 ```sql

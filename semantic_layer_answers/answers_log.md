@@ -193,3 +193,21 @@ Used for learning, pattern recognition, and stakeholder reference.
 - ALWAYS run platform discovery query for non-standard platforms before main query
 
 ---
+
+## Q6b — Desktop ATF Zone Definition + HPOV/SIG Zone Correction
+
+**Context:** User clarified that Desktop ATF = contentZone7 to contentZone27 (business definition).
+**Key Finding:** Desktop HPOV and SIG are NOT in zones 7-27.
+
+**Zone mapping confirmed (Nov 18-24 2025):**
+- HPOV (PrismAdjustableCardCarousel) primary zone: contentZone3 (NOT in ATF range 7-27). Only 86 total impressions in zone 11 over 7 days (12 avg daily = negligible noise)
+- SIG (PrismScrollableItemGrid) primary zones: contentZone41, contentZone42 (NOT in ATF range 7-27). Only 2,269 total impressions in zone 12 over 7 days (324 avg daily = negligible noise)
+
+**Desktop ATF Zones 7-27 — What IS in there:**
+- PrismAdjustableBanner (Adjustable Banner Small/Medium) — zones 7, 8, 9, 14, 15, 18, 19
+- PrismTriplePack (Triple Pack sizes) — zones 9, 10, 15, 16
+- ItemCarousel (P13N + Merch) — zones 12, 14, 15, 18, 19
+- PrismHeroCarousel — zones 12, 14, 15, 18, 19
+- DepartmentsGrid — zone 10
+
+**Rule saved:** reporting_conventions.md updated with full Desktop ATF definition, zone mapping, and query pattern.

@@ -296,8 +296,38 @@ When user asks for a single metric like "homepage CTR":
 ---
 
 ## Desktop Platform Notes
-- Desktop platform string: experience_lvl2 = 'Web: Desktop'
-- atf_flag = 'BTF' for ALL Desktop rows — no ATF classification exists for Desktop in hp_summary_asset
-- This is likely a data pipeline gap (Desktop HPOV is visually ATF but not tagged)
-- When user asks for Desktop ATF: report numbers without ATF filter + flag the data gap explicitly
-- Desktop HPOV scale: ~4M impressions/day (vs App Card 1 ~24M/day = ~17% of App scale)
+
+### Platform String
+- Desktop platform string: `experience_lvl2 = 'Web: Desktop'`
+- App platforms: `experience_lvl2 IN ('App: iOS', 'App: Android')` (SPACE after colon)
+
+### Desktop ATF Definition (BUSINESS RULE — CRITICAL)
+**Desktop ATF = contentZone7 through contentZone27**
+- This is NOT the same as the `atf_flag` column (which is always 'BTF' for Desktop — a data pipeline gap)
+- ALWAYS use the zone-based filter for Desktop ATF: `SAFE_CAST(REGEXP_EXTRACT(content_zone, r'\d+') AS INT64) BETWEEN 7 AND 27`
+- content_zone format on Desktop: camelCase — e.g., `contentZone7`, `contentZone12`, `contentZone27`
+
+### Desktop Content Zone → Module Mapping (Key Finding)
+| Module | Primary content_zone | In ATF (zones 7-27)? | Avg Daily Impressions |
+|--------|---------------------|---------------------|----------------------|
+| HPOV (PrismAdjustableCardCarousel) | contentZone3 | ❌ NO — zone 3 is below ATF range | ~4.2M/day (all Desktop) |
+| SIG (PrismScrollableItemGrid) | contentZone41, contentZone42 | ❌ NO — zones 41-42 are above ATF range | ~163K/day (all Desktop) |
+| HPOV fragments in ATF zones | contentZone11 | Technically yes — but NEGLIGIBLE (12 avg daily impressions) | ~12/day |
+| SIG fragments in ATF zones | contentZone12 | Technically yes — but NEGLIGIBLE (324 avg daily impressions) | ~324/day |
+
+**CRITICAL IMPLICATION:** On Desktop, HPOV and SIG are NOT in the ATF zone range (7-27) by business definition.
+- HPOV sits in contentZone3 (below the ATF floor of 7)
+- SIG sits in contentZone41-42 (above the ATF ceiling of 27)
+- Desktop ATF zones (7-27) are dominated by: PrismAdjustableBanner, PrismTriplePack, ItemCarousel, PrismHeroCarousel, DepartmentsGrid
+
+### Desktop ATF Query Pattern
+```sql
+-- Desktop ATF filter (use this instead of atf_flag which doesn't work for Desktop)
+WHERE experience_lvl2 = 'Web: Desktop'
+  AND SAFE_CAST(REGEXP_EXTRACT(content_zone, r'\d+') AS INT64) BETWEEN 7 AND 27
+```
+
+### atf_flag Column Behavior
+- `atf_flag = 'ATF'` or `'BTF'` for App platforms (works correctly)
+- `atf_flag = 'BTF'` for ALL Desktop rows — data pipeline gap, never use atf_flag for Desktop ATF analysis
+- Desktop scale: HPOV ~4.2M/day, SIG ~163K/day (vs App Card 1 ~24M/day = Desktop ~17% of App scale)
