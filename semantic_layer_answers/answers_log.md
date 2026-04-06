@@ -103,3 +103,34 @@ Used for learning, pattern recognition, and stakeholder reference.
 - Full formula saved in: business_context/content_type_filter.md
 
 ---
+
+## Q4 — CVP Meet Item Coverage (Week 20 Discovery)
+**Asked:** What is the CVP meet item coverage for week 20?
+**Table:** wmt-site-content-strategy.scs_production.CVPsummary
+**Outcome:** W-20 does not exist in the available data. User to confirm correct week.
+
+**8-Step Process Summary:**
+- Step 1: Metric = cvp_met_ind=1 / CV_Focus_SKU_IND=1. Table = CVPsummary (2.32B rows).
+- Step 2: MANDATORY event_dt filter before anything. fiscal_week format = W-NN.
+- Step 3: Read CVPsummary.md — noted data range documented as Aug 2025 to Mar 2026.
+- Step 4: Ran cheap discovery on narrow date range to map fiscal_week to dates. Found data = W-26 (Aug 2025) to W-10 (Apr 4 2026). 37 distinct weeks.
+- Step 5: W-20 not in range. FY26 W-20 = June 2025 (before data). FY27 W-20 = May 2026 (future). Stopped before expensive full query.
+- Step 6: Confirmed running WHERE fiscal_week='W-20' would scan 812GB+ and return 0 rows. Correct to pause.
+- Step 7: Provided full 37-week map with start/end dates. Offered 4 likely interpretations.
+- Step 8: Did NOT run main CVP query (cost saved). Awaiting user clarification.
+
+**CVPsummary Confirmed Date Range (updated from knowledge base):**
+- Earliest: W-26 = 2025-08-01
+- Latest: W-10 = 2026-04-04 (partial, 1 day)
+- Most recent complete week: W-09 (2026-03-28 to 2026-04-03)
+- Total distinct weeks: 37
+
+**Key Fiscal Week Markers:**
+- W-26: CVP data start (Aug 1, 2025)
+- W-42: AE2/Cyber Monday (Nov 15-21, 2025)
+- W-52: Last week of FY26 (Jan 24-30, 2026)
+- W-01: FY27 begins (Jan 31, 2026)
+- W-09: Most recent complete week (Mar 28 - Apr 3, 2026)
+- W-10: Partial (Apr 4, 2026 only)
+
+---

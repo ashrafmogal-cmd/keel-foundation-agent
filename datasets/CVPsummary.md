@@ -74,9 +74,10 @@ cvp_met_ind = 1        →  Did it meet the CVP criteria? (the outcome metric)
 | Metric | Value |
 |--------|-------|
 | **Total Rows** | **2.32 Billion** 🤯 |
-| **Date Range** | Aug 2025 → Mar 2026 (8 months) |
+| **Date Range** | Aug 2025 → Apr 4, 2026 (confirmed via query Apr 2026) |
 | **Distinct Dates** | 243 |
-| **Distinct Fiscal Weeks** | 36 |
+| **Distinct Fiscal Weeks** | 37 (W-26 FY26 through W-10 FY27) |
+| **Most Recent Complete Week** | W-09 (Mar 28 – Apr 3, 2026). W-10 is partial (Apr 4 only). |
 | **Platform Split** | iOS ~53%, Android ~38%, other ~9% |
 | **Seller Split** | 3P ~41%, NA ~32%, 1P ~27% |
 
