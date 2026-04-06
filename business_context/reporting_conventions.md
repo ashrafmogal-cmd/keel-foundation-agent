@@ -263,6 +263,18 @@ Offer the breakdown as a follow-up question.
 
 ---
 
+## MANDATORY: Content_Type = Merch Filter
+
+ALWAYS filter to Merch content when calculating CTR, GMV, ATC, or any performance metric.
+WMC (ads) content must be excluded — mixing it in distorts all benchmarks.
+
+Use the CASE expression defined in: business_context/content_type_filter.md
+Filter: WHERE content_type = 'Merch'
+
+This applies to ALL queries against hp_summary_asset.
+
+---
+
 ## CTR Formula (Confirmed by Business Owner, April 2026)
 
 CORRECT: SAFE_DIVIDE(SUM(overall_click_count), SUM(module_view_count)) * 100

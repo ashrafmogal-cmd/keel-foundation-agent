@@ -94,3 +94,12 @@ Used for learning, pattern recognition, and stakeholder reference.
 - Only drill to hp_module_name when explicitly asked for card-level detail
 
 ---
+
+**CORRECTION (Q3 + all future queries):**
+- ALWAYS filter Content_Type = 'Merch' when calculating CTR, GMV, or any performance metric
+- Content_Type is a derived CASE expression — not a raw column in the table
+- WMC = ads content (content_served_by='ads' or specific zone/module combos)
+- Merch = organic site merchandising content (everything else)
+- Full formula saved in: business_context/content_type_filter.md
+
+---
