@@ -54,3 +54,30 @@ Used for learning, pattern recognition, and stakeholder reference.
 - Metrics to report: GMV + GMV/click only (no CTR, impressions, clicks unless specifically asked).
 
 ---
+
+## Q3 — CTR WoW: All HP Modules (Mar 28–Apr 3 vs Mar 21–27)
+**Asked:** What is the CTR for this week vs last week?
+**Table:** wmt-site-content-strategy.scs_production.hp_summary_asset
+**Platforms:** App: iOS + App: Android
+**This Week:** 2026-03-28 to 2026-04-03 (Easter week — Easter = Apr 5, 2026)
+**Last Week:** 2026-03-21 to 2026-03-27
+
+**HPOV CTR WoW (with benchmarks):**
+- AutoScroll Card 1: 0.21% → TW | 0.15% → LW | +40.0% WoW | Benchmark: 0.23% (still below)
+- AutoScroll Card 2: 0.16% TW | 0.09% LW | +77.5% WoW | Benchmark: 0.15% (NOW ABOVE ✅)
+- AutoScroll Card 3: 0.10% TW | 0.10% LW | -1.3% WoW | Benchmark: 0.13% (below)
+- AutoScroll Card 4: 0.32% TW | 0.36% LW | -10.4% WoW | Benchmark: 0.17% (above ✅)
+- AutoScroll Card 5: 0.39% TW | 0.29% LW | +35.4% WoW | Benchmark: 0.25% (above ✅)
+
+**Top Movers WoW:**
+- AutoScroll Card 2: +77.5% (biggest HPOV gainer)
+- Social Carousel: -62.8% (biggest drop — reduced SOV or content swap)
+- Hubspoke: +36.4%
+- SIG Card 5: +32.4%
+- AutoScroll Card 1: +40.0%
+
+**Key Insight:** Easter week (Mar 28–Apr 3) driving broad CTR lift across most modules. Cards 2, 4, 5 now above their benchmarks. Social Carousel -63% is an anomaly worth investigating.
+**Data Quality Note:** Generic module name rows (SIG, AutoScroll, TriplePack) with near-zero impressions produce impossible CTRs (10,000%+) — excluded from output. Always filter noise rows by minimum impression threshold.
+**SQL Pattern Used:** Single pivot query with CASE WHEN per week for conditional aggregation — cost efficient (one scan, two week comparison).
+
+---
