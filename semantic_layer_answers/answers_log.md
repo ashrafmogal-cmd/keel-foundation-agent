@@ -25,19 +25,26 @@ Used for learning, pattern recognition, and stakeholder reference.
 **Asked:** Which modules in ATF are driving the most GMV for 2/1 to 2/14?
 **Table:** wmt-site-content-strategy.scs_production.hp_summary_asset
 **Platforms:** App: iOS + App: Android
-**Key Findings:**
-- P13N Item Carousel = #1 ATF GMV driver by a massive margin: $18,073,685 (95% of all ATF GMV)
-  - CTR: 6.64% | GMV/impression: $0.2358 | GMV/click: $3.55
-- AutoScroll Card 1 = #2 at $662,285 GMV | CTR: 0.18% (below 0.23% benchmark)
-- AutoScroll Card 2 = $99,456 | CTR: 0.11% (below 0.15% benchmark)
-- AutoScroll Card 3 = $76,470 | CTR: 0.10% (below 0.13% benchmark)
-- AutoScroll Card 5 = $72,235 | CTR: 0.22% (below 0.25% benchmark)
-- AutoScroll Card 4 = $69,946 | CTR: 0.14% (below 0.17% benchmark)
-- Amend Banner + OST = 0 GMV (operational modules — no purchase attribution expected)
-- All HPOV cards below benchmark during Valentine's Day period (Feb 1-14)
+**ATF Definition:** content_zone IN ('contentZone1'–'contentZone6')
+**Key Findings (CORRECTED — CZ1–CZ6 scope):**
+- SIG Card 1: $8,862,573 GMV | GMV/click $1.25 — **#1 ATF driver**
+- SIG Card 2: $1,109,948 GMV | GMV/click $1.00
+- AutoScroll Card 1: $662,285 GMV | GMV/click $1.10
+- P13N Item Carousel: $544,221 GMV | GMV/click null (clicks not captured in CZ1–6 scope)
+- SIG Card 3: $502,998 GMV | GMV/click $0.95
+- SIG Card 4: $238,520 GMV | GMV/click $1.02
+- SIG Card 5: $107,247 GMV | GMV/click $0.89
+- AutoScroll Card 2: $99,456 GMV | GMV/click $0.33
+- AutoScroll Card 3: $76,470 GMV | GMV/click $0.32
+- AutoScroll Card 5: $72,235 GMV | GMV/click $0.49
+- AutoScroll Card 4: $69,946 GMV | GMV/click $0.61
+- SIG Card 6: $56,082 GMV | GMV/click $0.67
+- Merch Item Carousel: $42,235 GMV
+**Key Insight:** P13N Item Carousel showed $18M GMV in first (wrong) query without CZ filter — dropped to
+  $544K with correct ATF CZ1–6 scope. 97% of P13N GMV is actually BTF. SIG Card 1 alone ($8.86M)
+  outperforms all 5 HPOV AutoScroll cards combined (~$980K).
 **Data Quality Note:** atf_flag column is UNRELIABLE — tags ALL modules as 'BTF' including HPOV AutoScroll Cards.
-  Use known module names/moduletype values for ATF filtering instead.
-  AutoScroll Cards 6–10 exist in data (anomaly — should only be Cards 1-5).
+  Use content_zone field (CZ1–CZ6 = ATF) for all ATF/BTF filtering.
 
 **⚠️ CORRECTION (User Feedback):**
 - ATF definition: Use content_zone field. contentZone1–contentZone6 = ATF. contentZone7+ = BTF.
