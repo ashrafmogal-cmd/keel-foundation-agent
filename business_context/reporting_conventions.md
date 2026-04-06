@@ -292,3 +292,12 @@ When user asks for a single metric like "homepage CTR":
 2. Then offer: "Would you like this broken down by module type?"
 3. If yes, group by moduletype
 4. If card-level needed, group by hp_module_name
+
+---
+
+## Desktop Platform Notes
+- Desktop platform string: experience_lvl2 = 'Web: Desktop'
+- atf_flag = 'BTF' for ALL Desktop rows — no ATF classification exists for Desktop in hp_summary_asset
+- This is likely a data pipeline gap (Desktop HPOV is visually ATF but not tagged)
+- When user asks for Desktop ATF: report numbers without ATF filter + flag the data gap explicitly
+- Desktop HPOV scale: ~4M impressions/day (vs App Card 1 ~24M/day = ~17% of App scale)

@@ -163,3 +163,33 @@ Used for learning, pattern recognition, and stakeholder reference.
 - Scenario assumes static 70% allocation; P13N algo distributes dynamically in practice
 
 ---
+
+## Q6 — Desktop ATF HPOV + SIG Avg Daily Impressions (Nov 18-24 2025)
+**Asked:** What are the avg daily impressions on Desktop ATF HPOV and SIG from 11/18 to 11/24?
+**Table:** wmt-site-content-strategy.scs_production.hp_summary_asset
+**Platform:** Web: Desktop (experience_lvl2 = 'Web: Desktop')
+**Date Range:** 2025-11-18 to 2025-11-24 (7 days | W-42/W-43, AE2 event period)
+
+**KEY DATA FINDING — ATF Flag Not Available for Desktop:**
+- All Desktop rows in hp_summary_asset have atf_flag = 'BTF' — zero ATF rows exist
+- Desktop HPOV is visually ATF but not tagged as such in the data pipeline
+- Likely a data instrumentation gap — worth flagging to data team
+- Query ran without ATF filter (all Desktop data returned)
+
+**Results:**
+- Desktop HPOV (PrismAdjustableCardCarousel): 4,173,161 avg daily impressions | 29,212,130 total (7 days) | Min: 3,201,023 | Max: 6,308,037
+- Desktop SIG (PrismScrollableItemGrid): 163,482 avg daily impressions | 1,144,371 total (7 days) | Min: 108,363 | Max: 333,561
+
+**Context:**
+- Desktop HPOV is 26x larger than Desktop SIG
+- Desktop HPOV (4.2M/day) vs App Card 1 alone (~24M/day) = Desktop ~17% of App Card 1
+- Max HPOV daily (6.3M) likely = AE2 Black Friday peak. Min (3.2M) = pre-event days
+- 2x day-over-day range on HPOV confirms strong event-driven traffic variation
+
+**Platform Discovery Learnings (save for future queries):**
+- Desktop platform string: 'Web: Desktop' (NOT 'App: Desktop' or 'Desktop')
+- App platforms: 'App: iOS', 'App: Android' (with space after colon)
+- atf_flag column values: 'ATF' and 'BTF' for App; only 'BTF' for Desktop
+- ALWAYS run platform discovery query for non-standard platforms before main query
+
+---
