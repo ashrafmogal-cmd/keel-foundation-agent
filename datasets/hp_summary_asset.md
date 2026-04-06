@@ -77,7 +77,8 @@ One row = one **homepage asset/module** sliced by:
 
 ```sql
 -- CTR (Click Through Rate)
-asset_clicks_count / NULLIF(module_view_count, 0) AS ctr
+overall_click_count / NULLIF(module_view_count, 0) AS ctr  -- CORRECT. Do NOT use asset_clicks_count for CTR.
+-- NOTE: asset_clicks_count is NOT the right column for CTR. Use overall_click_count.
 
 -- CPTS (Clicks Per Thousand Sessions) — join with hp_session
 (asset_clicks_count / NULLIF(hp_session_count, 0)) * 1000 AS cpts
@@ -114,6 +115,25 @@ WHERE session_start_dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
 GROUP BY 1, 2, 3
 ORDER BY session_start_dt DESC
 ```
+
+---
+
+## Module Grain Guide
+
+Two levels of granularity exist for modules in this table:
+
+- moduletype: Higher-level grouping. e.g. PrismAdjustableCardCarousel (= all HPOV cards), PrismScrollableItemGrid (= all SIG cards). DEFAULT grain for module breakdowns.
+- hp_module_name: Lower-level, individual card. e.g. AutoScroll Card 1, SIG Card 2. Use only when card-level detail is requested.
+
+Key moduletype values:
+- PrismAdjustableCardCarousel = HPOV AutoScroll Cards 1-5
+- PrismScrollableItemGrid = SIG Cards 1-6
+- ItemCarousel = P13N or Merch item carousels
+- PrismHeroCarousel = Hero Carousel
+- OrderStatusTracker = OST
+- AmendBanner = Amend Banner
+
+RULE: Default to moduletype for breakdowns. Only use hp_module_name when card-level drill-down is asked for.
 
 ---
 

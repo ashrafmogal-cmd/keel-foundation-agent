@@ -233,4 +233,50 @@ WHERE content_zone IN ('contentZone1','contentZone2','contentZone3','contentZone
 
 ---
 
+## CTR Formula (CONFIRMED)
+
+**Correct formula:** `SAFE_DIVIDE(SUM(overall_click_count), SUM(module_view_count)) * 100`
+**Wrong column:** `asset_clicks_count` — do NOT use this for CTR calculation
+**Source:** Confirmed by business owner, April 2026
+
+## Module Grain for Reporting
+
+When a user asks for CTR "by module" → use `moduletype` as the grouping column (not `hp_module_name`).
+`moduletype` = module category level (e.g. PrismAdjustableCardCarousel = all HPOV cards together)
+`hp_module_name` = individual card level (e.g. AutoScroll Card 1, AutoScroll Card 2)
+
+Default behavior:
+1. If asked for "homepage CTR" → return ONE overall number first
+2. Then ask: "Would you like this broken down by module type?"
+3. If yes → group by moduletype
+4. If they want card-level → group by hp_module_name
+
+## Answer Scope Rule
+
+When user asks for a single metric (e.g. "homepage CTR") → return that single number first.
+Do NOT proactively break it down by module unless asked.
+Offer the breakdown as a follow-up question.
+
+---
+
 *Last updated by Keel Agent | Confirmed by: Ashraf (site content strategy team)*
+
+---
+
+## CTR Formula (Confirmed by Business Owner, April 2026)
+
+CORRECT: SAFE_DIVIDE(SUM(overall_click_count), SUM(module_view_count)) * 100
+WRONG:   asset_clicks_count / module_view_count  -- do NOT use for CTR
+
+## Module Grain Rule (Confirmed by Business Owner, April 2026)
+
+When breaking down CTR or GMV by module, use moduletype as the grouping column.
+Only drill to hp_module_name if the user explicitly asks for card-level detail.
+
+## Answer Scope Rule
+
+When user asks for a single metric like "homepage CTR":
+1. Return ONE overall number first
+2. Then offer: "Would you like this broken down by module type?"
+3. If yes, group by moduletype
+4. If card-level needed, group by hp_module_name

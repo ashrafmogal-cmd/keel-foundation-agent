@@ -80,4 +80,17 @@ Used for learning, pattern recognition, and stakeholder reference.
 **Data Quality Note:** Generic module name rows (SIG, AutoScroll, TriplePack) with near-zero impressions produce impossible CTRs (10,000%+) — excluded from output. Always filter noise rows by minimum impression threshold.
 **SQL Pattern Used:** Single pivot query with CASE WHEN per week for conditional aggregation — cost efficient (one scan, two week comparison).
 
+**⚠️ CORRECTIONS FROM USER FEEDBACK (Q3):**
+1. CTR formula is `overall_click_count / module_view_count` — NOT `asset_clicks_count / module_view_count`
+2. Module grain for breakdowns = `moduletype` (not `hp_module_name`). moduletype is the higher-level grouping. hp_module_name is a sub-breakdown.
+3. When asked for "homepage CTR" → give ONE overall number first, then ask if user wants a breakdown.
+4. Only drill to hp_module_name if explicitly asked for card-level detail.
+
+---
+
+**CORRECTIONS FROM USER FEEDBACK (Q3):**
+- CTR formula = overall_click_count / module_view_count (NOT asset_clicks_count)
+- Module breakdown grain = moduletype (NOT hp_module_name — that is a sub-level). When asked for homepage CTR: return ONE number first, then offer breakdown
+- Only drill to hp_module_name when explicitly asked for card-level detail
+
 ---
