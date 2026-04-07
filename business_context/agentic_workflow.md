@@ -287,3 +287,26 @@ The next major milestone is the **Evaluation Phase** where:
 ---
 
 *Last updated by Keel Agent | Source: FY27 Analytics Roadmap PPTX (Slides 1–5)*
+
+---
+
+## Critical Self-Correction Rule (Added from Q7 Failure)
+
+### Premise Verification — DO THIS BEFORE STEP 5 (REASONING)
+When a question contains an embedded assumption (e.g., "why does X have more of Y than Z?"), ALWAYS verify the assumption against the data BEFORE explaining it.
+
+**Wrong approach (what happened in Q7):**
+- User asked: "Why does Tech have higher SOV than other categories?"
+- Data showed: Tech is 7th out of 10 in SOV
+- Keel wrote: "Premise Confirmed" ← WRONG
+
+**Correct approach:**
+- Run the query
+- Check if the assumed condition is actually true
+- If FALSE: state the correction clearly first ("The premise is incorrect — Tech is 7th in SOV, not highest")
+- If TRUE: then proceed with the explanation
+
+### Rule for Step 6 (Evaluate) Checklist — Add This Item:
+□ Does the data actually support the premise embedded in the question?
+  If NO → correct the premise before explaining anything
+  Never rationalize a false premise with 5 business reasons

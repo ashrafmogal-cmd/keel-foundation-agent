@@ -214,49 +214,42 @@ Used for learning, pattern recognition, and stakeholder reference.
 
 ---
 
-## Q7 — Why Does Tech Message on SIG Have Higher SOV Despite Lower CTR?
-**Asked:** Why does the tech message on SIG see higher share of voice despite lower CTR?
-**Table:** wmt-site-content-strategy.scs_production.hp_summary_asset
-**Correction applied:** Use message_name (not sbu). Filter contentZone4 + contentZone5. contentZone5 = site merch driven. moduletype = PrismScrollableItemGrid.
-**REGEX Feature built:** message_name classifier deployed — see business_context/sig_message_regex_classifier.md
+## Q7 — SIG contentZone5 SOV by Message Category (Tech Premise Was False)
+**Asked:** Why does the Tech message on SIG see higher Share of Voice despite lower CTR?
+**Keel Finding:** PREMISE IS INCORRECT. Tech is 7th out of 10 categories in SOV (3.88%). It does NOT have the highest SOV.
+**Self-correction:** Step 6 (Evaluate) failed — Keel initially wrote "Premise Confirmed" without checking if Tech was actually #1 in SOV. It was not.
 
-**Zone Context:**
-- contentZone4 = 100% P13N/Unattributed (429.8M imp) — Jump Right Back In, personalized carousels. NO site merch messages.
-- contentZone5 = Site Merchandise Driven (1.35B imp) — all named messages. This is where Tech SOV question applies.
+**Zone context:**
+- contentZone4 = 100% P13N/Unattributed. No named merch messages.
+- contentZone5 = Site merch driven. All named campaigns live here.
 
-**Tech Messages Identified (REGEX: r'tech|electron|gaming and media|pc gaming|laptop|tablet|computer'):**
-- Tech Rollbacks And More: 51,254,598 impressions (dominant evergreen)
-- 2026 March Savings Event Tech: 1,187,889 impressions
-- Gaming And Media Rollbacks And More: ~8 impressions (negligible)
-- Combined in classifier: 52,442,584 impressions, 3.88% SOV in CZ5
+**Full CZ5 Results (message_name REGEX classifier, Last 28 Days):**
+| Rank | Category | SOV% | CTR% | ATC/1K | GMV/imp | GMV/click |
+|------|----------|------|------|--------|---------|----------|
+| 1 | Cross Category / Savings | 44.47% | 0.9283% | 1.804 | $0.0049 | $0.53 |
+| 2 | Toys / Kids / Baby | 21.89% | 0.6309% | 2.784 | $0.0033 | $0.53 |
+| 3 | Home | 8.98% | 1.0405% | 1.059 | $0.0033 | $0.32 |
+| 4 | Beauty / Personal Care | 5.52% | 0.3115% | 0.486 | $0.0009 | $0.29 |
+| 5 | Fashion | 4.83% | 0.5010% | 0.765 | $0.0014 | $0.29 |
+| 6 | Consumables / Health | 4.44% | 0.4375% | 1.757 | $0.0024 | $0.55 |
+| **7** | **Tech / Electronics** | **3.88%** | **0.4232%** | **0.362** | $0.0018 | $0.43 |
+| 8 | Other | 2.04% | 0.4836% | 2.097 | $0.0026 | $0.53 |
+| 9 | Food | 1.97% | 0.4017% | 2.406 | $0.0039 | $0.98 |
+| 10 | Sports / Auto / Pets | 1.36% | 0.6973% | 0.696 | $0.0019 | $0.27 |
+| 11 | P13N / Unattributed | 0.61% | 0.4489% | 0.506 | $0.0013 | $0.30 |
 
-**Full CZ5 Category Breakdown (Last 28 Days):**
-| Category | SOV% | CTR% | ATC/1K | GMV/imp | GMV/click |
-|----------|------|------|--------|---------|----------|
-| Cross Category / Savings | 44.47% | 0.9283% | 1.804 | $0.0049 | $0.53 |
-| Toys / Kids / Baby | 21.89% | 0.6309% | 2.784 | $0.0033 | $0.53 |
-| Home | 8.98% | 1.0405% | 1.059 | $0.0033 | $0.32 |
-| Beauty / Personal Care | 5.52% | 0.3115% | 0.486 | $0.0009 | $0.29 |
-| Fashion | 4.83% | 0.5010% | 0.765 | $0.0014 | $0.29 |
-| Consumables / Health | 4.44% | 0.4375% | 1.757 | $0.0024 | $0.55 |
-| **Tech / Electronics** | **3.88%** | **0.4232%** | **0.362** | **$0.0018** | **$0.43** |
-| Other | 2.04% | 0.4836% | 2.097 | $0.0026 | $0.53 |
-| Food | 1.97% | 0.4017% | 2.406 | $0.0039 | $0.98 |
-| Sports / Auto / Pets | 1.36% | 0.6973% | 0.696 | $0.0019 | $0.27 |
-| P13N / Unattributed | 0.61% | 0.4489% | 0.506 | $0.0013 | $0.30 |
+**What the data actually shows:**
+- Tech is NOT highest SOV — 6 categories outrank it
+- Tech has LOWEST ATC/1K (0.362) — arguably over-indexed at 7th SOV given its weak performance
+- Home: highest CTR (1.04%) but only 3rd SOV — under-indexed vs performance
+- Sports: strong CTR (0.70%) but only 10th SOV — most under-indexed vs CTR
+- Food: highest ATC/1K (2.406) but only 9th SOV — served by ATF P13N instead, not BTF SIG
 
-**Premise Confirmed:**
-- Tech = 7th SOV rank, 9th CTR rank, LAST ATC/1K rank (0.362 — lowest in entire CZ5)
-- Sports: 0.6973% CTR (65% higher than Tech) but 1.36% SOV (65% less than Tech)
-- Food: ATC/1K = 2.406 (6.6x Tech) but only 1.97% SOV (half of Tech)
+**REGEX Tech messages confirmed (CZ5):**
+- Tech Rollbacks And More: 51,254,598 imp, 0.4243% CTR
+- 2026 March Savings Event Tech: 1,187,889 imp, 0.3771% CTR
+- Pattern: r'tech|electron|gaming and media|pc gaming|laptop|tablet|computer'
+- Game Time excluded intentionally (sports event)
 
-**5 Business Reasons Tech Gets Higher SOV:**
-1. Evergreen Tier 1 with Impression Floor — Tech Rollbacks runs 365 days, guaranteed floor
-2. Broad Customer Eligibility — massive P13N pool across phones/laptops/tablets/accessories/gaming
-3. High ASP Attribution Gap — $200-$2000+ items, HP strict last-touch undercounts GMV
-4. Catalog Depth — massive SKU breadth easily fills SIG carousel requirements (50+ items)
-5. P13N Multi-Signal + Exploration Mode — algo optimizes CTR+ATC+GMV+CLTV composite; may also be in exploration
-
-**Performance Risk:**
-- Tech has LOWEST ATC/1K (0.362) in CZ5. Food (2.406) and Home (CTR 1.04%) dramatically outperform.
-- If HP attribution gap doesn't explain the delta, Tech SOV may be misallocated vs higher-converting categories.
+**Keel self-correction rule added:**
+ALWAYS verify the premise in a question against the data BEFORE building an explanation. If the premise is false, state it clearly first. Do not "confirm" premises that contradict the data.
