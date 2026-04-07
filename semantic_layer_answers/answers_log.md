@@ -211,3 +211,38 @@ Used for learning, pattern recognition, and stakeholder reference.
 - DepartmentsGrid — zone 10
 
 **Rule saved:** reporting_conventions.md updated with full Desktop ATF definition, zone mapping, and query pattern.
+
+---
+
+## Q7 — Why Does ETS (Tech) on SIG Have Higher SOV Despite Lower CTR?
+**Asked:** Why does the tech message on SIG see higher share of voice despite lower CTR?
+**Table:** wmt-site-content-strategy.scs_production.hp_summary_asset
+**Module:** PrismScrollableItemGrid (SIG) | Merch filter applied | iOS + Android
+**Date:** Last 28 days (approx Mar 10 - Apr 7, 2026)
+
+**Premise Confirmed:**
+- ETS SOV: 12.87% (2nd highest after CROSS CATEGORY at 72.31%)
+- ETS CTR: 0.5312% (5th out of 7 SBUs — lower than FASHION 0.8875%, HOME 0.8185%, HARDLINES 0.7638%, CROSS CATEGORY 0.8959%)
+- ETS has 2nd highest SOV but 5th lowest CTR — premise confirmed
+
+**Full SBU Breakdown (SOV + CTR + ATCs):**
+| SBU | SOV% | CTR% | ATC/1K | GMV/imp | GMV/click | Total ATCs |
+|-----|------|------|--------|---------|-----------|-----------|
+| CROSS CATEGORY | 72.31% | 0.8959% | 2.11 | $0.0044 | $0.49 | 2,090,953 |
+| ETS | 12.87% | 0.5312% | 1.10 | $0.0019 | $0.36 | 193,117 |
+| CONSUMABLES | 8.85% | 0.3596% | 0.94 | $0.0015 | $0.41 | 113,447 |
+| FOOD | 2.51% | 0.4785% | 3.82 | $0.0050 | $1.04 | 130,787 |
+| HOME | 1.71% | 0.8185% | 0.91 | $0.0044 | $0.54 | 21,318 |
+| HARDLINES | 1.05% | 0.7638% | 0.65 | $0.0021 | $0.28 | 9,389 |
+| FASHION | 0.70% | 0.8875% | 0.87 | $0.0021 | $0.23 | 8,379 |
+
+**The 5 Business Reasons ETS Gets High SOV Despite Lower CTR:**
+1. **Absolute ATC Volume** — 193K total ATCs (2nd highest). P13N reads historical ATC volume, not just rate. High absolute conversion = high algorithmic confidence.
+2. **Large Customer Segment** — Tech/Electronics is one of Walmart's largest customer interest segments. More eligible customers = more P13N impression allocations = higher natural SOV.
+3. **High ASP Masks True GMV** — ETS items ($200-$2000+) are high-consideration purchases. HP strict last-touch attribution undercounts ETS GMV (research → external comparison → return to buy breaks attribution chain). Real downstream value is higher than $0.36/click suggests.
+4. **Message Tiering Priority** — Tech/ETS messages (seasonal, brand launches, back to school) frequently qualify for Tier 1/2 status. SIG algorithm respects message tier — higher tier = impression floor guaranteed.
+5. **P13N Multi-Signal Optimization** — P13N optimizes CTR + ATC + GMV + CLTV composite. ETS scores strongly on ATC volume and customer CLTV signals despite lower CTR rate. Fewer clicks but higher-value customers.
+
+**FOOD Anomaly:**
+- FOOD: highest ATC/1K (3.82) and highest GMV/click ($1.04) but only 2.51% SOV
+- Explanation: FMCG/Grocery replenishment is handled by ATF P13N carousels (Continue Your Shopping, Price Drops For You). BTF SIG is less relevant for replenishment behavior — groceries get bought from ATF P13N automatically, not from a SIG push.
