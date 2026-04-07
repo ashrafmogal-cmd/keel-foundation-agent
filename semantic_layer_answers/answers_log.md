@@ -279,3 +279,11 @@ ALWAYS verify the premise in a question against the data BEFORE building an expl
 - HPsummary provides richer WMC data than hp_summary_asset: Adjustable Banner Small clicks tracked (hp_summary_asset showed null), Triple Pack Small visible as WMC module
 - Card 3 CTR (0.15%) at benchmark. Card 2 CTR (0.11%) below benchmark (0.15%)
 - Adjustable Banner Small CTR (0.39%) highest of all WMC modules — unexpected given it showed null clicks in hp_summary_asset
+
+---
+
+## Q8 (CORRECTED) — WMC Impressions This Week using Correct Method
+**Rule confirmed:** NEVER use HPsummary. Always use hp_summary_asset + CASE WHEN content type classifier.
+**Table:** wmt-site-content-strategy.scs_production.hp_summary_asset
+**Content Type classifier:** CASE WHEN content_served_by='ads' → WMC; CONTAINS(disable_content_personalization,'true') → Merch; legacy WMC conditions → WMC; else → Merch
+**Saved to:** wmc_wplus_ost_amend.md + hp_summary_asset.md + HPsummary.md (deprecated)

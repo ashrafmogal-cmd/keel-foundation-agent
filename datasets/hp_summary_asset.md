@@ -147,6 +147,48 @@ RULE: Default to moduletype for breakdowns. Only use hp_module_name when card-le
 
 ---
 
+## WMC / Merch Content Type Classifier
+
+This CASE statement is the source-of-truth classifier for separating WMC (Ads) from Merch impressions in hp_summary_asset.
+Use this EVERY TIME you need to separate WMC from Merch. NEVER use HPsummary for this purpose.
+
+```sql
+CASE
+  WHEN LOWER(IFNULL(content_served_by, '')) = 'ads'
+    THEN 'WMC'
+  WHEN LOWER(IFNULL(disable_content_personalization, '')) LIKE '%true%'
+    THEN 'Merch'
+  WHEN LOWER(IFNULL(disable_content_personalization, '')) LIKE '%false%'
+    AND LOWER(IFNULL(personalized_asset, '')) = 'default'
+    AND session_start_dt <= DATE('2025-03-01')
+    AND LOWER(IFNULL(content_zone, '')) = 'contentzone3'
+    AND LOWER(IFNULL(hp_module_name, '')) IN ('autoscroll card 1','autoscroll card 2','autoscroll card 3')
+    THEN 'WMC'
+  WHEN LOWER(IFNULL(disable_content_personalization, '')) LIKE '%false%'
+    AND LOWER(IFNULL(personalized_asset, '')) = 'default'
+    AND (
+      (LOWER(IFNULL(content_zone, '')) IN ('contentzone8','contentzone9')
+        AND LOWER(IFNULL(hp_module_name, '')) = 'adjustable banner small')
+      OR
+      (LOWER(IFNULL(content_zone, '')) IN ('contentzone10','contentzone11')
+        AND LOWER(IFNULL(hp_module_name, '')) = 'triple pack small')
+    )
+    THEN 'WMC'
+  ELSE 'Merch'
+END AS content_type
+```
+
+### Logic Explained
+| Condition | Result | Notes |
+|-----------|--------|-------|
+| content_served_by = 'ads' | WMC | Primary WMC signal — ad server placed this impression |
+| disable_content_personalization CONTAINS 'true' | Merch | Content personalization disabled = site merch |
+| disable_content_personalization CONTAINS 'false' + personalized_asset = 'default' + date <= 2025-03-01 + contentzone3 + AutoScroll Card 1/2/3 | WMC | Legacy WMC detection (pre-March 2025) |
+| disable_content_personalization CONTAINS 'false' + personalized_asset = 'default' + (contentzone8/9 + Adjustable Banner Small) OR (contentzone10/11 + Triple Pack Small) | WMC | WMC banner/triple pack formats |
+| Everything else | Merch | Default classification |
+
+---
+
 ## 🔗 Relationships
 
 - **Joins with** `hp_session` on `session_start_dt + experience_lvl2 + traffic_source_lvl2` for CPTS

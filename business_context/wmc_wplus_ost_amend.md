@@ -24,16 +24,89 @@
 
 ---
 
-## HOW TO QUERY WMC IMPRESSIONS — USE HPsummary + Content_Type = 'WMC'
+## HOW TO QUERY WMC / ADS IMPRESSIONS — DEFINITIVE METHOD
 
-**Rule:** For any WMC/Ads impression query, use HPsummary with Content_Type = 'WMC'.
-Do NOT use the derived content_served_by = 'ads' filter on hp_summary_asset for WMC queries.
+### Table: hp_summary_asset (ALWAYS — NEVER HPsummary)
 
-**Platform filter for WMC rows:** 'App: iOS' and 'App: Android' WITH space (same as hp_summary_asset — NOT 'App:iOS' without space)
-**Impressions column:** viewed_impressions
-**Clicks column:** overall_click_count
+### Content Type Classifier — CASE WHEN (Copy/Paste Ready)
+This is the source-of-truth CASE statement for classifying content as WMC or Merch in hp_summary_asset.
+Use this EVERY TIME you need to separate WMC from Merch.
 
-See HPsummary.md for full WMC query pattern and module list.
+```sql
+CASE
+  WHEN LOWER(IFNULL(content_served_by, '')) = 'ads'
+    THEN 'WMC'
+  WHEN LOWER(IFNULL(disable_content_personalization, '')) LIKE '%true%'
+    THEN 'Merch'
+  WHEN LOWER(IFNULL(disable_content_personalization, '')) LIKE '%false%'
+    AND LOWER(IFNULL(personalized_asset, '')) = 'default'
+    AND session_start_dt <= DATE('2025-03-01')
+    AND LOWER(IFNULL(content_zone, '')) = 'contentzone3'
+    AND LOWER(IFNULL(hp_module_name, '')) IN ('autoscroll card 1','autoscroll card 2','autoscroll card 3')
+    THEN 'WMC'
+  WHEN LOWER(IFNULL(disable_content_personalization, '')) LIKE '%false%'
+    AND LOWER(IFNULL(personalized_asset, '')) = 'default'
+    AND (
+      (LOWER(IFNULL(content_zone, '')) IN ('contentzone8','contentzone9')
+        AND LOWER(IFNULL(hp_module_name, '')) = 'adjustable banner small')
+      OR
+      (LOWER(IFNULL(content_zone, '')) IN ('contentzone10','contentzone11')
+        AND LOWER(IFNULL(hp_module_name, '')) = 'triple pack small')
+    )
+    THEN 'WMC'
+  ELSE 'Merch'
+END AS content_type
+```
+
+### Logic Explained
+| Condition | Result | Notes |
+|----|-------|
+| content_served_by = 'ads' | WMC | Primary WMC signal — ad server placed this impression |
+| disable_content_personalization CONTAINS 'true' | Merch | Content personalization disabled = site merch |
+| disable_content_personalization CONTAINS 'false' + personalized_asset = 'default' + date <= 2025-03-01 + contentzone3 + AutoScroll Card 1/2/3 | WMC | Legacy WMC detection (pre-March 2025) |
+| disable_content_personalization CONTAINS 'false' + personalized_asset = 'default' + (contentzone8/9 + Adjustable Banner Small) OR (contentzone10/11 + Triple Pack Small) | WMC | WMC banner/triple pack formats |
+| Everything else | Merch | Default classification |
+
+### Standard WMC Query Pattern (hp_summary_asset)
+```sql
+WITH base AS (
+  SELECT
+    session_start_dt,
+    hp_module_name,
+    module_view_count,
+    asset_clicks_count,
+    CASE
+      WHEN LOWER(IFNULL(content_served_by, '')) = 'ads' THEN 'WMC'
+      WHEN LOWER(IFNULL(disable_content_personalization, '')) LIKE '%true%' THEN 'Merch'
+      WHEN LOWER(IFNULL(disable_content_personalization, '')) LIKE '%false%'
+        AND LOWER(IFNULL(personalized_asset, '')) = 'default'
+        AND session_start_dt <= DATE('2025-03-01')
+        AND LOWER(IFNULL(content_zone, '')) = 'contentzone3'
+        AND LOWER(IFNULL(hp_module_name, '')) IN ('autoscroll card 1','autoscroll card 2','autoscroll card 3')
+        THEN 'WMC'
+      WHEN LOWER(IFNULL(disable_content_personalization, '')) LIKE '%false%'
+        AND LOWER(IFNULL(personalized_asset, '')) = 'default'
+        AND (
+          (LOWER(IFNULL(content_zone, '')) IN ('contentzone8','contentzone9') AND LOWER(IFNULL(hp_module_name, '')) = 'adjustable banner small')
+          OR (LOWER(IFNULL(content_zone, '')) IN ('contentzone10','contentzone11') AND LOWER(IFNULL(hp_module_name, '')) = 'triple pack small')
+        ) THEN 'WMC'
+      ELSE 'Merch'
+    END AS content_type
+  FROM `wmt-site-content-strategy.scs_production.hp_summary_asset`
+  WHERE session_start_dt BETWEEN '[start_date]' AND '[end_date]'
+    AND experience_lvl2 IN ('App: iOS', 'App: Android')
+)
+SELECT
+  session_start_dt,
+  hp_module_name,
+  SUM(module_view_count)  AS impressions,
+  SUM(asset_clicks_count) AS clicks,
+  ROUND(SAFE_DIVIDE(SUM(asset_clicks_count), SUM(module_view_count)) * 100, 4) AS ctr_pct
+FROM base
+WHERE content_type = 'WMC'
+GROUP BY 1, 2
+ORDER BY session_start_dt, impressions DESC
+```
 
 ---
 
