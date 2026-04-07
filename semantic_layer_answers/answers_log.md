@@ -214,35 +214,49 @@ Used for learning, pattern recognition, and stakeholder reference.
 
 ---
 
-## Q7 — Why Does ETS (Tech) on SIG Have Higher SOV Despite Lower CTR?
+## Q7 — Why Does Tech Message on SIG Have Higher SOV Despite Lower CTR?
 **Asked:** Why does the tech message on SIG see higher share of voice despite lower CTR?
 **Table:** wmt-site-content-strategy.scs_production.hp_summary_asset
-**Module:** PrismScrollableItemGrid (SIG) | Merch filter applied | iOS + Android
-**Date:** Last 28 days (approx Mar 10 - Apr 7, 2026)
+**Correction applied:** Use message_name (not sbu). Filter contentZone4 + contentZone5. contentZone5 = site merch driven. moduletype = PrismScrollableItemGrid.
+**REGEX Feature built:** message_name classifier deployed — see business_context/sig_message_regex_classifier.md
+
+**Zone Context:**
+- contentZone4 = 100% P13N/Unattributed (429.8M imp) — Jump Right Back In, personalized carousels. NO site merch messages.
+- contentZone5 = Site Merchandise Driven (1.35B imp) — all named messages. This is where Tech SOV question applies.
+
+**Tech Messages Identified (REGEX: r'tech|electron|gaming and media|pc gaming|laptop|tablet|computer'):**
+- Tech Rollbacks And More: 51,254,598 impressions (dominant evergreen)
+- 2026 March Savings Event Tech: 1,187,889 impressions
+- Gaming And Media Rollbacks And More: ~8 impressions (negligible)
+- Combined in classifier: 52,442,584 impressions, 3.88% SOV in CZ5
+
+**Full CZ5 Category Breakdown (Last 28 Days):**
+| Category | SOV% | CTR% | ATC/1K | GMV/imp | GMV/click |
+|----------|------|------|--------|---------|----------|
+| Cross Category / Savings | 44.47% | 0.9283% | 1.804 | $0.0049 | $0.53 |
+| Toys / Kids / Baby | 21.89% | 0.6309% | 2.784 | $0.0033 | $0.53 |
+| Home | 8.98% | 1.0405% | 1.059 | $0.0033 | $0.32 |
+| Beauty / Personal Care | 5.52% | 0.3115% | 0.486 | $0.0009 | $0.29 |
+| Fashion | 4.83% | 0.5010% | 0.765 | $0.0014 | $0.29 |
+| Consumables / Health | 4.44% | 0.4375% | 1.757 | $0.0024 | $0.55 |
+| **Tech / Electronics** | **3.88%** | **0.4232%** | **0.362** | **$0.0018** | **$0.43** |
+| Other | 2.04% | 0.4836% | 2.097 | $0.0026 | $0.53 |
+| Food | 1.97% | 0.4017% | 2.406 | $0.0039 | $0.98 |
+| Sports / Auto / Pets | 1.36% | 0.6973% | 0.696 | $0.0019 | $0.27 |
+| P13N / Unattributed | 0.61% | 0.4489% | 0.506 | $0.0013 | $0.30 |
 
 **Premise Confirmed:**
-- ETS SOV: 12.87% (2nd highest after CROSS CATEGORY at 72.31%)
-- ETS CTR: 0.5312% (5th out of 7 SBUs — lower than FASHION 0.8875%, HOME 0.8185%, HARDLINES 0.7638%, CROSS CATEGORY 0.8959%)
-- ETS has 2nd highest SOV but 5th lowest CTR — premise confirmed
+- Tech = 7th SOV rank, 9th CTR rank, LAST ATC/1K rank (0.362 — lowest in entire CZ5)
+- Sports: 0.6973% CTR (65% higher than Tech) but 1.36% SOV (65% less than Tech)
+- Food: ATC/1K = 2.406 (6.6x Tech) but only 1.97% SOV (half of Tech)
 
-**Full SBU Breakdown (SOV + CTR + ATCs):**
-| SBU | SOV% | CTR% | ATC/1K | GMV/imp | GMV/click | Total ATCs |
-|-----|------|------|--------|---------|-----------|-----------|
-| CROSS CATEGORY | 72.31% | 0.8959% | 2.11 | $0.0044 | $0.49 | 2,090,953 |
-| ETS | 12.87% | 0.5312% | 1.10 | $0.0019 | $0.36 | 193,117 |
-| CONSUMABLES | 8.85% | 0.3596% | 0.94 | $0.0015 | $0.41 | 113,447 |
-| FOOD | 2.51% | 0.4785% | 3.82 | $0.0050 | $1.04 | 130,787 |
-| HOME | 1.71% | 0.8185% | 0.91 | $0.0044 | $0.54 | 21,318 |
-| HARDLINES | 1.05% | 0.7638% | 0.65 | $0.0021 | $0.28 | 9,389 |
-| FASHION | 0.70% | 0.8875% | 0.87 | $0.0021 | $0.23 | 8,379 |
+**5 Business Reasons Tech Gets Higher SOV:**
+1. Evergreen Tier 1 with Impression Floor — Tech Rollbacks runs 365 days, guaranteed floor
+2. Broad Customer Eligibility — massive P13N pool across phones/laptops/tablets/accessories/gaming
+3. High ASP Attribution Gap — $200-$2000+ items, HP strict last-touch undercounts GMV
+4. Catalog Depth — massive SKU breadth easily fills SIG carousel requirements (50+ items)
+5. P13N Multi-Signal + Exploration Mode — algo optimizes CTR+ATC+GMV+CLTV composite; may also be in exploration
 
-**The 5 Business Reasons ETS Gets High SOV Despite Lower CTR:**
-1. **Absolute ATC Volume** — 193K total ATCs (2nd highest). P13N reads historical ATC volume, not just rate. High absolute conversion = high algorithmic confidence.
-2. **Large Customer Segment** — Tech/Electronics is one of Walmart's largest customer interest segments. More eligible customers = more P13N impression allocations = higher natural SOV.
-3. **High ASP Masks True GMV** — ETS items ($200-$2000+) are high-consideration purchases. HP strict last-touch attribution undercounts ETS GMV (research → external comparison → return to buy breaks attribution chain). Real downstream value is higher than $0.36/click suggests.
-4. **Message Tiering Priority** — Tech/ETS messages (seasonal, brand launches, back to school) frequently qualify for Tier 1/2 status. SIG algorithm respects message tier — higher tier = impression floor guaranteed.
-5. **P13N Multi-Signal Optimization** — P13N optimizes CTR + ATC + GMV + CLTV composite. ETS scores strongly on ATC volume and customer CLTV signals despite lower CTR rate. Fewer clicks but higher-value customers.
-
-**FOOD Anomaly:**
-- FOOD: highest ATC/1K (3.82) and highest GMV/click ($1.04) but only 2.51% SOV
-- Explanation: FMCG/Grocery replenishment is handled by ATF P13N carousels (Continue Your Shopping, Price Drops For You). BTF SIG is less relevant for replenishment behavior — groceries get bought from ATF P13N automatically, not from a SIG push.
+**Performance Risk:**
+- Tech has LOWEST ATC/1K (0.362) in CZ5. Food (2.406) and Home (CTR 1.04%) dramatically outperform.
+- If HP attribution gap doesn't explain the delta, Tech SOV may be misallocated vs higher-converting categories.
