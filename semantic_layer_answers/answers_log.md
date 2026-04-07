@@ -253,3 +253,29 @@ Used for learning, pattern recognition, and stakeholder reference.
 
 **Keel self-correction rule added:**
 ALWAYS verify the premise in a question against the data BEFORE building an explanation. If the premise is false, state it clearly first. Do not "confirm" premises that contradict the data.
+
+---
+
+## Q8 — WMC Impressions This Week (WTD)
+**Asked:** What is the volume of impressions that went into Ads/WMC this week?
+**Rule Applied:** HPsummary + Content_Type = 'WMC' (user correction from using content_served_by = 'ads' on hp_summary_asset)
+**Platform discovery:** WMC rows in HPsummary use 'App: iOS' WITH space (same as hp_summary_asset — NOT 'App:iOS' without space as documented for Merch rows)
+
+**Date:** WTD Sat Apr 4 – Sun Apr 5, 2026 (2 of 4 days loaded — Apr 6+7 pending pipeline)
+**Note:** HPsummary WMC only shows Apr 5. Apr 4 present in hp_summary_asset but not HPsummary WMC rows.
+
+**Results (Apr 5 — 1 day loaded in HPsummary WMC):**
+| Module | Impressions | Clicks | CTR |
+|--------|------------|--------|-----|
+| AutoScroll Card 2 | 9,584,775 | 10,227 | 0.1067% |
+| AutoScroll Card 3 | 7,302,306 | 10,955 | 0.1500% |
+| Adjustable Banner Small | 4,875,059 | 18,779 | 0.3852% |
+| Triple Pack Small | 2,621,659 | 5,112 | 0.1950% |
+| Adjustable Banner Medium | 12 | — | — |
+| AutoScroll Card 4 | 3 | — | — |
+| **TOTAL WMC (WTD)** | **24,383,814** | **45,073** | **0.1848%** |
+
+**Key findings:**
+- HPsummary provides richer WMC data than hp_summary_asset: Adjustable Banner Small clicks tracked (hp_summary_asset showed null), Triple Pack Small visible as WMC module
+- Card 3 CTR (0.15%) at benchmark. Card 2 CTR (0.11%) below benchmark (0.15%)
+- Adjustable Banner Small CTR (0.39%) highest of all WMC modules — unexpected given it showed null clicks in hp_summary_asset

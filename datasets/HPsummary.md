@@ -31,6 +31,55 @@ WHERE Content_Type = 'Merch'
 
 ---
 
+## WMC / Ads Queries — Use Content_Type Filter
+
+### The Rule (from user feedback)
+When someone asks about WMC or Ads impressions, use **HPsummary + Content_Type = 'WMC'**. 
+Do NOT use the derived CASE statement on hp_summary_asset to identify WMC.
+
+### Content_Type Values in HPsummary
+| Value | Meaning | Usage |
+|-------|---------|-------|
+| `'Merch'` | Site merchandise content | Default filter for all merch reporting |
+| `'WMC'` | Walmart Media Connect / Ads | Use this for all WMC/Ads impression queries |
+
+### CRITICAL: Platform Naming for WMC Rows
+WMC rows in HPsummary use **'App: iOS'** and **'App: Android'** WITH a space after the colon.
+This is the SAME format as hp_summary_asset — NOT the 'App:iOS' (no-space) format documented for Merch rows.
+**Always use WITH SPACE for WMC queries:** `experience_lvl2 IN ('App: iOS', 'App: Android')`
+
+### WMC Modules Visible in HPsummary (confirmed Apr 2026)
+| Module | Typical Daily Impressions | Notes |
+|--------|--------------------------|-------|
+| AutoScroll Card 2 | ~9-12M/day | Primary WMC HPOV card |
+| AutoScroll Card 3 | ~7-10M/day | Primary WMC HPOV card |
+| Adjustable Banner Small | ~3-5M/day | Desktop/WMC banner — clicks tracked in HPsummary (not in hp_summary_asset) |
+| Triple Pack Small | ~2-3M/day | WMC format |
+| Adjustable Banner Medium | negligible | |
+
+### Standard WMC Query Pattern
+```sql
+SELECT
+  session_start_dt,
+  hp_module_name,
+  SUM(viewed_impressions)                                                         AS impressions,
+  SUM(overall_click_count)                                                        AS clicks,
+  ROUND(SAFE_DIVIDE(SUM(overall_click_count), SUM(viewed_impressions)) * 100, 4) AS ctr_pct
+FROM `wmt-site-content-strategy.scs_production.HPsummary`
+WHERE session_start_dt BETWEEN '[start_date]' AND '[end_date]'
+  AND experience_lvl2 IN ('App: iOS', 'App: Android')  -- WITH space
+  AND Content_Type = 'WMC'
+GROUP BY 1, 2
+ORDER BY session_start_dt ASC, impressions DESC
+```
+
+### Why HPsummary > hp_summary_asset for WMC
+- HPsummary has a clean `Content_Type` column — no derived CASE logic needed
+- HPsummary captures clicks for Adjustable Banner Small (hp_summary_asset shows null clicks for this module)
+- HPsummary also surfaces Triple Pack Small as WMC (not visible in hp_summary_asset WMC filter)
+
+---
+
 ## 📋 Key Columns
 
 ### Dimensions

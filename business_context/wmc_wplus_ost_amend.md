@@ -24,6 +24,19 @@
 
 ---
 
+## HOW TO QUERY WMC IMPRESSIONS — USE HPsummary + Content_Type = 'WMC'
+
+**Rule:** For any WMC/Ads impression query, use HPsummary with Content_Type = 'WMC'.
+Do NOT use the derived content_served_by = 'ads' filter on hp_summary_asset for WMC queries.
+
+**Platform filter for WMC rows:** 'App: iOS' and 'App: Android' WITH space (same as hp_summary_asset — NOT 'App:iOS' without space)
+**Impressions column:** viewed_impressions
+**Clicks column:** overall_click_count
+
+See HPsummary.md for full WMC query pattern and module list.
+
+---
+
 ## 📺 WMC — Walmart Media Connect (Ads)
 
 ### What WMC Is
