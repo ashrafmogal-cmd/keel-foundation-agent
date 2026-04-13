@@ -24,12 +24,12 @@ This framework classifies every HPOV message as **High Engagement**, **Avg Engag
 
 ### Step 1 — Message Clicks & Impressions
 **Tableau:** `{ FIXED [Message Name], [Platform], [Module Type] : SUM([overall_click_count]) }`
-**SQL equivalent:** Aggregate `asset_clicks_count` and `module_view_count` grouped by `(message_name, experience_lvl2, moduletype, hp_module_name)`
-- Uses `COALESCE(asset_clicks_count, 0)` to handle null click rows
+**SQL equivalent:** Aggregate `overall_click_count` and `module_view_count` grouped by `(message_name, experience_lvl2, moduletype, hp_module_name)`
+- Uses `COALESCE(overall_click_count, 0)` to handle null click rows
 
 ### Step 2 — Message CTR Raw
 **Formula:** `SUM(message_clicks) / SUM(message_impressions)`
-**SQL:** `SAFE_DIVIDE(SUM(asset_clicks_count), SUM(module_view_count))`
+**SQL:** `SAFE_DIVIDE(SUM(overall_click_count), SUM(module_view_count))`
 - This is the actual achieved CTR for the message at each platform × card location
 
 ### Step 3 — Location Benchmark CTR
@@ -96,7 +96,7 @@ base AS (
     hp_module_name,
     message_name,
     SUM(module_view_count)                AS impressions,
-    SUM(COALESCE(asset_clicks_count, 0))  AS clicks
+    SUM(COALESCE(overall_click_count, 0))  AS clicks
   FROM `wmt-site-content-strategy.scs_production.hp_summary_asset`
   WHERE session_start_dt BETWEEN DATE('{{START_DATE}}') AND DATE('{{END_DATE}}')
     AND moduletype      = 'PrismAdjustableCardCarousel'
@@ -238,8 +238,8 @@ Original query aliased `total_impressions` to a formatted string using `FORMAT('
 ### ⚠️ Null message_name rows
 hp_summary_asset contains rows where `message_name IS NULL` (typically 1 row per card × platform combination). These must be filtered out with `AND message_name IS NOT NULL` in the base CTE. Without this filter, a "null message" would appear in the results and distort the benchmark.
 
-### ⚠️ Null asset_clicks_count rows
-Some rows in hp_summary_asset have `asset_clicks_count = NULL`. Use `COALESCE(asset_clicks_count, 0)` in the base CTE to treat these as zero clicks rather than propagating NULLs through CTR calculations.
+### ⚠️ Null click rows
+Some rows in hp_summary_asset have `overall_click_count = NULL`. Use `COALESCE(overall_click_count, 0)` in the base CTE to treat these as zero clicks rather than propagating NULLs through CTR calculations.
 
 ---
 

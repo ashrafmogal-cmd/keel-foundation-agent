@@ -74,7 +74,7 @@ WITH base AS (
     session_start_dt,
     hp_module_name,
     module_view_count,
-    asset_clicks_count,
+    overall_click_count,
     CASE
       WHEN LOWER(IFNULL(content_served_by, '')) = 'ads' THEN 'WMC'
       WHEN LOWER(IFNULL(disable_content_personalization, '')) LIKE '%true%' THEN 'Merch'
@@ -100,8 +100,8 @@ SELECT
   session_start_dt,
   hp_module_name,
   SUM(module_view_count)  AS impressions,
-  SUM(asset_clicks_count) AS clicks,
-  ROUND(SAFE_DIVIDE(SUM(asset_clicks_count), SUM(module_view_count)) * 100, 4) AS ctr_pct
+  SUM(overall_click_count) AS clicks,
+  ROUND(SAFE_DIVIDE(SUM(overall_click_count), SUM(module_view_count)) * 100, 4) AS ctr_pct
 FROM base
 WHERE content_type = 'WMC'
 GROUP BY 1, 2

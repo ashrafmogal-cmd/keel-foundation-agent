@@ -145,8 +145,8 @@ SELECT
   hp_module_name,
   message_name,
   SUM(module_view_count) AS sig_impressions,
-  SUM(asset_clicks_count) AS sig_clicks,
-  SAFE_DIVIDE(SUM(asset_clicks_count), SUM(module_view_count)) AS ctr
+  SUM(overall_click_count) AS sig_clicks,
+  SAFE_DIVIDE(SUM(overall_click_count), SUM(module_view_count)) AS ctr
 FROM `wmt-site-content-strategy.scs_production.hp_summary_asset`
 WHERE session_start_dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
   AND LOWER(hp_module_name) LIKE '%scrollable%'   -- or filter on moduletype

@@ -44,7 +44,7 @@ hp_session_count / NULLIF(total_session_count, 0) AS hp_visitation_rate
 -- CPTS (requires joining with hp_summary_asset)
 -- Step 1: Get total HP sessions by segment
 -- Step 2: Join on session_start_dt + experience_lvl2 + traffic_source_lvl2
--- Step 3: (asset_clicks_count / hp_session_count) * 1000
+-- Step 3: (overall_click_count / hp_session_count) * 1000
 
 -- Weekly HP Sessions by Platform
 SELECT

@@ -91,7 +91,7 @@ overall_click_count / NULLIF(module_view_count, 0) AS ctr  -- CORRECT. Do NOT us
 -- NOTE: asset_clicks_count is NOT the right column for CTR. Use overall_click_count.
 
 -- CPTS (Clicks Per Thousand Sessions) — join with hp_session
-(asset_clicks_count / NULLIF(hp_session_count, 0)) * 1000 AS cpts
+(overall_click_count / NULLIF(hp_session_count, 0)) * 1000 AS cpts
 
 -- ATC Rate
 total_atc_count / NULLIF(module_view_count, 0) AS atc_rate
@@ -116,8 +116,8 @@ SELECT
     experience_lvl2,
     hp_module_name,
     SUM(module_view_count) AS total_impressions,
-    SUM(asset_clicks_count) AS total_clicks,
-    SAFE_DIVIDE(SUM(asset_clicks_count), SUM(module_view_count)) AS ctr,
+    SUM(overall_click_count) AS total_clicks,
+    SAFE_DIVIDE(SUM(overall_click_count), SUM(module_view_count)) AS ctr,  -- overall_click_count is the correct column for CTR
     SUM(total_atc_count) AS total_atc,
     SUM(total_gmv) AS total_gmv
 FROM `wmt-site-content-strategy.scs_production.hp_summary_asset`

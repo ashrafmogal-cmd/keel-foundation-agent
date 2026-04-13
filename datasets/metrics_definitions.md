@@ -11,7 +11,7 @@
 | Metric | Definition | Formula | Primary Table |
 |--------|-----------|---------|---------------|
 | **Impressions (Viewed)** | Number of times an asset/module was **loaded AND viewed** by a customer | — | `hp_summary_asset.module_view_count` |
-| **Clicks** | Number of clicks (including Add to Cart) on an asset that navigate to a subsequent page | — | `hp_summary_asset.asset_clicks_count` |
+| **Clicks** | Number of clicks (including Add to Cart) on an asset that navigate to a subsequent page | — | `hp_summary_asset.overall_click_count` |
 | **CTR (Click Through Rate)** | Overall click-through rate on the homepage, impression-normalized | `Total Clicks ÷ Viewed Impressions` | `hp_summary_asset` |
 | **CPTS (Clicks Per Thousand Sessions)** | A normalized engagement rate per 1,000 sessions — session-normalized alternative to CTR | `(Total Clicks ÷ Total HP Sessions) × 1,000` | `hp_summary_asset` + `hp_session` |
 | **Asset Exit Rate** | % of homepage journeys where a user **left without engaging** on any subsequent page | `Exit Sessions ÷ HP Sessions` | — |
@@ -129,8 +129,8 @@ SELECT
     hp_module_name,
     experience_lvl2,
     SUM(module_view_count) AS impressions,
-    SUM(asset_clicks_count) AS clicks,
-    SAFE_DIVIDE(SUM(asset_clicks_count), SUM(module_view_count)) AS ctr
+    SUM(overall_click_count) AS clicks,
+    SAFE_DIVIDE(SUM(overall_click_count), SUM(module_view_count)) AS ctr
 FROM `wmt-site-content-strategy.scs_production.hp_summary_asset`
 WHERE session_start_dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
 GROUP BY 1, 2
@@ -169,7 +169,7 @@ asset_clicks AS (
         session_start_dt AS session_date,
         experience_lvl2,
         hp_module_name,
-        SUM(asset_clicks_count) AS clicks
+        SUM(overall_click_count) AS clicks
     FROM `wmt-site-content-strategy.scs_production.hp_summary_asset`
     WHERE session_start_dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
     GROUP BY 1, 2, 3

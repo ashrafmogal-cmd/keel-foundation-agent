@@ -55,7 +55,7 @@ experience_lvl2 IN ('App: iOS', 'App: Android')
 | Table | Clicks Column | Notes |
 |-------|--------------|-------|
 | `HPsummary` | `overall_click_count` | Primary CTR numerator |
-| `hp_summary_asset` | `asset_clicks_count` | Primary CTR numerator |
+| `hp_summary_asset` | `overall_click_count` | Primary CTR numerator |
 | Both tables | `all_clicks_count_flag` | Used for Asset Exit Rate only |
 
 ### Asset Exit Rate Formula
