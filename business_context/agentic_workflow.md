@@ -114,6 +114,8 @@ Ask yourself:
 - What **metric** is the user asking about? (CTR, GMV, impressions, activations, SOV?)
 - What **module/message** are they asking about? (HPOV Card 1? SIG? Specific message?)
 - What **date range**? (Specific week? Fiscal week? YTD? WoW comparison?)
+    → If a date range is mentioned WITHOUT an explicit year (e.g. "Feb 1 to Feb 14", "last month", "Q1"),
+      **ALWAYS ask: "Which year are you looking at?"** before running any query. Never default to the current year or 2025.
 - What **platform**? (Default = iOS + Android. Did they specify?)
 - What **grain**? (Daily? Weekly? By message? By SBU?)
 - Is there any **comparison** implied? (This week vs last week? This year vs LY?)

@@ -119,7 +119,9 @@ SUM(COALESCE(subs_activations, 0) + COALESCE(acc_activations, 0)) AS services_ac
 | `Module_Group` | Content vs Commerce |
 | `traffic_source_lvl2` | Traffic source |
 | `SBU` | Strategic Business Unit |
-| `atf_flag` / `atf_location` | Above/below fold |
+| `content_zone` | ATF = contentZone1–6 (App), contentZone7–27 (Desktop). Use this for ATF/BTF filtering. |
+| `atf_flag` | ⚠️ UNRELIABLE — atf_flag tags all Desktop rows as BTF. Never use for ATF filtering. |
+| `atf_location` | ⚠️ Do NOT use for ATF filtering — use content_zone values instead. |
 | `Prism_Module` | Prism design system |
 | `default_shown` | Default vs personalized |
 | `personalized_asset` | Personalization flag |
