@@ -331,3 +331,35 @@ WHERE experience_lvl2 = 'Web: Desktop'
 - `atf_flag = 'ATF'` or `'BTF'` for App platforms (works correctly)
 - `atf_flag = 'BTF'` for ALL Desktop rows — data pipeline gap, never use atf_flag for Desktop ATF analysis
 - Desktop scale: HPOV ~4.2M/day, SIG ~163K/day (vs App Card 1 ~24M/day = Desktop ~17% of App scale)
+
+---
+
+## FY27 Fiscal Week Calendar — Key Week Anchors
+
+> FY27 WK1 starts **Saturday, January 31, 2026**. FY26 WK1 starts **Saturday, February 1, 2025**.
+> Always verify the day-of-week BEFORE hardcoding date ranges into SQL.
+
+| Fiscal Week | FY27 Start | FY27 End | FY26 Start | FY26 End |
+|-------------|-----------|---------|-----------|----------|
+| WK1  | Jan 31, 2026 | Feb 6, 2026  | Feb 1, 2025  | Feb 7, 2025  |
+| WK6  | Mar 7, 2026  | Mar 13, 2026 | Mar 8, 2025  | Mar 14, 2025 |
+| WK8  | Mar 21, 2026 | Mar 27, 2026 | Mar 22, 2025 | Mar 28, 2025 |
+| WK9  | Mar 28, 2026 | Apr 3, 2026  | Mar 29, 2025 | Apr 4, 2025  |
+| WK10 | Apr 4, 2026  | Apr 10, 2026 | Apr 5, 2025  | Apr 11, 2025 |
+| WK11 | Apr 11, 2026 | Apr 17, 2026 | Apr 12, 2025 | Apr 18, 2025 |
+| WK42 | Nov 14, 2026 | Nov 20, 2026 | Nov 15, 2025 | Nov 21, 2025 |
+| WK43 | Nov 21, 2026 | Nov 27, 2026 | Nov 22, 2025 | Nov 28, 2025 |
+| WK52 | Jan 23, 2027 | Jan 29, 2027 | Jan 24, 2026 | Jan 30, 2026 |
+
+### ⚠️ Critical Lesson — FY Year Start Varies by Year
+- **FY26**: WK1 = Feb 1, 2025 (Feb 1 WAS a Saturday ✓)
+- **FY27**: WK1 = Jan 31, 2026 (Feb 1 is a Sunday in 2026 — fiscal year rolls back to Jan 31) 
+- **NEVER assume Feb 1 is always the fiscal year start** — verify the day of week each year
+
+### Date Range Clarification Rule
+- Ask the user "Which fiscal week / date range?" ONLY when the request is genuinely ambiguous
+- Do NOT ask when the user has already specified a week number (e.g., "WK10") — look it up from this table
+- Do NOT ask when the context clearly implies a period (e.g., "last week", "this week")
+- Use the fiscal week calendar above to resolve week numbers to dates automatically
+
+*Last updated: April 2026 — corrected after WK10 FY27 date error (used Apr 5–11 instead of Apr 4–10)*
