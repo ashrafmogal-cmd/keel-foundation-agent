@@ -5,6 +5,25 @@
 
 ---
 
+
+## 🗓️ Walmart Fiscal Year & Quarter Definitions
+
+> **Walmart Fiscal Year starts on February 1st** — NOT January 1st.
+
+| Quarter | Months | Example (FY27) |
+|---------|--------|----------------|
+| **Q1** | February, March, April | Feb 1 – Apr 30, 2026 |
+| **Q2** | May, June, July | May 1 – Jul 31, 2026 |
+| **Q3** | August, September, October | Aug 1 – Oct 31, 2026 |
+| **Q4** | November, December, January | Nov 1, 2026 – Jan 31, 2027 |
+
+⚠️ **Always confirm fiscal year AND fiscal week with the user before querying.**
+- "Q1" without a year → ask "Which fiscal year? (FY starts Feb 1)"
+- "Week 14" without a year → ask "Which fiscal year?"
+- Never assume the current year.
+
+---
+
 ## 📆 Walmart Fiscal Week Definition
 
 > **Walmart fiscal week runs SATURDAY through FRIDAY.**
@@ -363,3 +382,12 @@ WHERE experience_lvl2 = 'Web: Desktop'
 - Use the fiscal week calendar above to resolve week numbers to dates automatically
 
 *Last updated: April 2026 — corrected after WK10 FY27 date error (used Apr 5–11 instead of Apr 4–10)*
+
+## 🔄 Metric Synonyms & Lingo
+
+| What user says | What it actually means | Source |
+|----------------|------------------------|--------|
+| **B2C Sessions** | Homepage Sessions (`hp_session_count`) | `hp_session` table |
+| **Nav Module** / **Visual Navigation Module** | A `moduletype` in `hp_summary_asset` — NOT a `message_name` | `hp_summary_asset` |
+
+> ⚠️ If a user asks for "B2C Sessions", use `hp_session_count` from the `hp_session` table — it is the same as homepage sessions.

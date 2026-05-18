@@ -91,9 +91,40 @@ GROUP BY 1, 2, 3
 
 ## 🔗 Relationships
 
-- **Primary join key** for `hp_summary_asset` CPTS calculations: `session_start_dt + experience_lvl2 + traffic_source_lvl2`
+- **Primary join key** for `hp_summary_asset` CPTS calculations (confirmed in Tableau):
+  ```
+  hp_summary_asset.experience_lvl2        = hp_session.experience_lvl2
+  DATE(hp_summary_asset.session_start_dt) = DATE(hp_session.session_start_dt)
+  ```
+  Cardinality: **Many-to-Many** (some rows match). Always `SUM(hp_session_count)` by date+platform first, then join.
+  `traffic_source_lvl2` is optional — include only if CPTS breakdown by traffic source is needed.
 - Acts as the **denominator** for any session-normalized metric across all Keel tables
 
 ---
 
 *Last updated by Keel Agent | Source: BigQuery schema exploration + Confluence HP Analytics 101*
+---
+
+## 🔄 Synonyms
+
+> **B2C Sessions** = `hp_session_count` — this is just another name for Homepage Sessions.
+> If a user asks for "B2C Sessions", they are asking for `SUM(hp_session_count)` from this table.
+---
+
+## 🚦 Traffic Source & CPTS Default
+
+> **Default traffic source for CPTS = `Organic: Direct`**
+
+When computing CPTS, filter `hp_session` to `traffic_source_lvl2 = 'Organic: Direct'` unless the user asks for a specific source or all traffic.
+
+**Why it matters — May 16 2026 example:**
+
+| Traffic Source Filter | Sessions | Clicks | CPTS |
+|---|---|---|---|
+| Organic: Direct only | 20,559,737 | 6,801,277 | **330** |
+| All traffic sources | 26,127,854 | 6,801,277 | **260** |
+
+> Note: clicks from `hp_summary_asset` are the same regardless of traffic source filter — only the `hp_session` denominator changes.
+
+> Formula: `total_clicks / (total_sessions / 1000)` — same as `(total_clicks / total_sessions) × 1,000`
+> Always state which traffic source was used in your answer to the user.

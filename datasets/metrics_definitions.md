@@ -13,7 +13,7 @@
 | **Impressions (Viewed)** | Number of times an asset/module was **loaded AND viewed** by a customer | — | `hp_summary_asset.module_view_count` |
 | **Clicks** | Number of clicks (including Add to Cart) on an asset that navigate to a subsequent page | — | `hp_summary_asset.overall_click_count` |
 | **CTR (Click Through Rate)** | Overall click-through rate on the homepage, impression-normalized | `Total Clicks ÷ Viewed Impressions` | `hp_summary_asset` |
-| **CPTS (Clicks Per Thousand Sessions)** | A normalized engagement rate per 1,000 sessions — session-normalized alternative to CTR | `(Total Clicks ÷ Total HP Sessions) × 1,000` | `hp_summary_asset` + `hp_session` |
+| **CPTS (Clicks Per Thousand Sessions)** | A normalized engagement rate per 1,000 sessions — ALL clicks (Merch + WMC) ÷ ALL HP sessions × 1,000. **No content_type filter. Default platform = ALL platforms.** | `(Total Clicks ÷ Total HP Sessions) × 1,000` | `hp_summary_asset` + `hp_session` |
 | **Asset Exit Rate** | % of homepage journeys where a user **left without engaging** on any subsequent page | `Exit Sessions ÷ HP Sessions` | — |
 | **Sessions** | A unique customer visit. Resets after **30 min of inactivity** OR **12 hours** (hard reset) | — | `hp_session` |
 | **HP Visitation Rate** | % of all sessions that visited the homepage | `hp_session_count ÷ total_session_count` | `hp_session` |
@@ -206,3 +206,59 @@ ORDER BY wm_wk_of_year DESC
 ---
 
 *Last updated by Keel Agent | Source: Confluence HP Analytics 101 + Keel Agent Workflows doc*
+---
+
+## 🔢 CPTS — Detailed Rules
+
+### What CPTS Measures
+CPTS = **ALL homepage clicks** (Merch + WMC combined) per 1,000 homepage sessions.
+It is a **volume metric** — how many total clicks does the homepage drive per 1,000 visitors.
+
+### ⚠️ Critical Rules
+
+| Rule | Detail |
+|------|--------|
+| **No content_type filter** | CPTS includes ALL content — Merch AND WMC (ads). Do NOT apply the CASE expression Merch filter. |
+| **All platforms by default** | Include App: iOS, App: Android, Web: Desktop, Web: Mobile — unless user explicitly asks for App only. |
+| **Traffic source: Organic: Direct (default)** | Filter `hp_session` to `traffic_source_lvl2 = 'Organic: Direct'` by default. Using all traffic sources inflates session count and deflates CPTS. Always tell the user which traffic source was used. |
+| **Join order matters** | Aggregate `hp_session` by date + platform FIRST, then join to `hp_summary_asset`. |
+
+### How it Differs From CTR
+
+| | CTR | CPTS |
+|-|-----|------|
+| Numerator | Merch clicks only | ALL clicks (Merch + WMC) |
+| Denominator | Viewed impressions | Homepage sessions |
+| Content filter | ✅ Apply Merch filter | 🚫 No filter |
+| Default platform | App: iOS + Android | ALL platforms |
+
+### Join Logic (confirmed from Tableau)
+```sql
+WITH sessions AS (
+  SELECT
+    DATE(session_start_dt) AS dt,
+    experience_lvl2,
+    SUM(hp_session_count) AS hp_sessions
+  FROM `wmt-site-content-strategy.scs_production.hp_session`
+  WHERE DATE(session_start_dt) BETWEEN 'YYYY-MM-DD' AND 'YYYY-MM-DD'
+    AND traffic_source_lvl2 = 'Organic: Direct'  -- default; change if user requests other sources
+  GROUP BY 1, 2  -- aggregate FIRST to avoid fan-out
+)
+SELECT
+  a.session_start_dt,
+  a.experience_lvl2,
+  SUM(a.overall_click_count) AS total_clicks,
+  MAX(s.hp_sessions) AS hp_sessions,
+  SAFE_DIVIDE(SUM(a.overall_click_count), MAX(s.hp_sessions)) * 1000 AS cpts
+FROM `wmt-site-content-strategy.scs_production.hp_summary_asset` a
+JOIN sessions s
+  ON a.session_start_dt = s.dt
+  AND a.experience_lvl2 = s.experience_lvl2
+WHERE a.session_start_dt BETWEEN 'YYYY-MM-DD' AND 'YYYY-MM-DD'
+-- NO content_type filter here
+-- NO platform restriction here unless user asks for App only
+-- traffic_source_lvl2 = 'Organic: Direct' applied to hp_session (default)
+-- Formula: total_clicks / (total_sessions / 1000)  OR  (total_clicks / total_sessions) * 1000
+GROUP BY 1, 2
+ORDER BY cpts DESC
+```
