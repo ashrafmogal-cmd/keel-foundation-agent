@@ -1,0 +1,10 @@
+# WBR Report App - Python Dependencies
+
+fastapi>=0.109.0
+uvicorn>=0.27.0
+google-cloud-bigquery>=3.14.0
+python-pptx>=0.6.21
+matplotlib>=3.8.0
+pandas>=2.1.0
+openpyxl>=3.1.0
+jinja2>=3.1.0
