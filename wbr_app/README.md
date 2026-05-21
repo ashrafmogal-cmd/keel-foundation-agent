@@ -56,14 +56,33 @@ http://127.0.0.1:8001/?selected_date=2026-05-12
 
 | Module | Metrics |
 |--------|---------|
-| HPOV (Cards 1–5) | CTR%, CTR WoW%, Clicks%, Clicks WoW%, ATC%, ATC WoW% |
-| ATF Carousels (SIG) | Same |
-| ATF Carousels | Same |
-| Walmart+ Banner | Same |
+| HPOV (Cards 1–5) | CTR Baseline, CTR%, CTR WoW%, ATC Rate Baseline, ATC Rate, ATC Rate WoW%, Engagement Performance |
+| SIG | Same |
+| Item Carousel | Same |
+| Navigation | Same |
+| Content | Same |
+| Carousels | Same |
 | Utility | Same |
-| BTF Navigation | Same |
-| BTF Content | Same |
-| BTF Carousels | Same |
+
+### Metric Definitions
+
+| Metric | Formula | Display |
+|--------|---------|----------|
+| **CTR Baseline** | FYTD CTR (Jan 31 → latest date) | `0.21%` |
+| **CTR%** | Current week CTR | `0.19%` |
+| **CTR WoW%** | vs previous fiscal week | `+5%` / `-3%` |
+| **ATC Rate Baseline** | FYTD ATCs per 1,000 impressions | `12.3` (no %) |
+| **ATC Rate** | Current week ATCs per 1,000 impressions | `11.8` (no %) |
+| **ATC Rate WoW%** | vs previous fiscal week | `+2%` / `-4%` |
+| **Engagement Performance** | (CTR% / CTR Baseline) × 100 | `92%` |
+
+### Engagement Performance Color Coding
+
+| Color | Range | Meaning |
+|-------|-------|---------|
+| 🟢 Green | ≥ 100% | At or above FYTD baseline |
+| 🟡 Yellow | 90–99% | Approaching baseline, watch closely |
+| 🔴 Red | < 90% | Significantly below baseline |
 
 ---
 
