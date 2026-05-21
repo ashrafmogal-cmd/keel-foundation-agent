@@ -180,6 +180,50 @@ User Question
 | **Q3** | CVP Brand Audit Agent, Data Anomaly Detection Agent, C&E Dashboard | 🔜 |
 | **Q4** | TrafficSense Chatbot, P13N Explainability, Feature Launch Decision Framework | 🔜 |
 
+---
+
+## 📊 Bundled Apps
+
+Keel comes with two local web apps for WBR preparation:
+
+### WBR App (Port 8001)
+
+Module-level performance dashboard with WoW comparisons.
+
+```bash
+# First time setup
+git clone https://github.com/ashrafmogal-cmd/keel-foundation-agent.git ~/keel-analytics
+cd ~/keel-analytics/wbr_app
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# Launch
+python main.py
+open "http://127.0.0.1:8001/?selected_date=$(date +%Y-%m-%d)"
+```
+
+**Metrics shown:**
+- CTR Baseline, CTR%, CTR WoW%
+- ATC Rate Baseline, ATC Rate, ATC Rate WoW% (displayed as `12.3`, not `12.3%`)
+- Engagement Performance = (CTR% / CTR Baseline) × 100
+  - 🟢 Green: ≥ 100% | 🟡 Yellow: 90-99% | 🔴 Red: < 90%
+
+### HP Charts App (Port 8002)
+
+Visual bar + bubble charts for message-level performance.
+
+```bash
+# Same setup as WBR App, then:
+python message_performance.py
+open "http://127.0.0.1:8002/?selected_date=$(date +%Y-%m-%d)"
+```
+
+**Prerequisites:**
+- BigQuery auth: `gcloud auth application-default login`
+- Access to `wmt-site-content-strategy` project
+- Python 3.9+
+
 **Business Outcome:** Eliminate ad-hoc analytics requests → free up analytics resources for strategic work.
 
 **Next Major Milestone:** Evaluation phase — Keel answers a test set of questions, analyst evaluates accuracy of answers + SQL + reasoning, feedback loop improves trust until answers can be shared directly with stakeholders without human QA.
