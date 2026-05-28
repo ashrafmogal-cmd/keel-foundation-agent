@@ -217,7 +217,8 @@ def get_sig_data(start, end, language='English', selected_carousels=None, select
         END AS display_label,
         SUM(module_view_count) AS imp,
         SUM(overall_click_count) AS clk,
-        SAFE_DIVIDE(SUM(overall_click_count), SUM(module_view_count)) * 100 AS ctr
+        SAFE_DIVIDE(SUM(overall_click_count), SUM(module_view_count)) * 100 AS ctr,
+        SAFE_DIVIDE(SUM(total_atc_count), SUM(module_view_count)) * 1000 AS atc_rate
       FROM `{BQ_HSA}`
       WHERE session_start_dt BETWEEN '{start}' AND '{end}'
         AND hp_module_name IN {SIG_CARDS} {lf} {caf} {CT_HSA}
@@ -372,6 +373,7 @@ def _thead():
         f'<th {_TH}>SOV Variance (+/-)</th>'
         f'<th {_TH}>CTR %</th>'
         f'<th {_TH}>ATC Rate</th>'
+        f'<th {_TH}>Impressions (M)</th>'
         '</tr></thead>'
     )
 
@@ -497,6 +499,7 @@ def render_hpov_table(data, sel_msgs=None):
                 + _var_td(rid)
                 + f'<td style="padding:7px 12px;text-align:center;{_BD}font-weight:700;color:{cc};">{ctr:.2f}%</td>'
                 + f'<td {_TD}>{atc:.1f}</td>'
+                + f'<td {_TD}>{float(row.get("imp_m") or 0):.1f}M</td>'
                 + '</tr>'
             )
             rn += 1
