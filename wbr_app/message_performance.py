@@ -379,11 +379,12 @@ def _thead():
 
 
 def _sig_thead():
-    """SIG table header — 5 cols."""
+    """SIG table header — 6 cols."""
     return (
         '<thead><tr style="background:#041e42;color:white;">'
         f'<th {_THL}>Group / Carousel</th>'
         f'<th {_THL}>Message / Asset</th>'
+        f'<th {_TH}>Impressions</th>'
         f'<th {_TH}>SOV %</th>'
         f'<th {_TH}>CTR %</th>'
         f'<th {_TH}>ATC Rate</th>'
@@ -546,13 +547,14 @@ def render_sig_table(data, selected_messages=None):
         if cn not in merch_cars: merch_cars[cn] = []
         merch_cars[cn].append(r)
 
-    # 5-column total row — accepts its own baseline + atc_rate
-    def total_row(label, sov, ctr, atc, bl):
+    # 6-column total row — accepts its own baseline + atc_rate + impressions
+    def total_row(label, imp_abs, sov, ctr, atc, bl):
         c = '#16a34a' if ctr >= bl else '#dc2626'
         return (
             f'<tr style="background:#f8fafc;font-weight:700;border-top:2px solid #cbd5e1;border-bottom:2px solid #cbd5e1;">'
             f'<td style="padding:10px 14px;border:1px solid #cbd5e1;font-size:13px;font-weight:800;border-left:4px solid #0071CE;">{label}</td>'
             f'<td style="padding:10px 14px;border:1px solid #cbd5e1;"></td>'
+            f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;font-weight:800;">{imp_abs:,.0f}</td>'
             f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;font-weight:800;">{sov:.1f}%</td>'
             f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;font-weight:800;color:{c};">{ctr:.2f}%</td>'
             f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;font-weight:800;">{atc:.1f}</td>'
@@ -570,11 +572,13 @@ def render_sig_table(data, selected_messages=None):
     # ── P13N section ──────────────────────────────────────────────────
     if p13n:
         p_atc = (sum(sf(r,'imp_m')*sf(r,'atc_rate') for r in p13n)/p_imp) if p_imp else 0
-        html += total_row('⬡ P13N — Top Picks for You', p_sov, p_ctr, p_atc, bl_p13n)
+        p_imp_abs = sum(sf(r,'imp') for r in p13n)
+        html += total_row('⬡ P13N — Top Picks for You', p_imp_abs, p_sov, p_ctr, p_atc, bl_p13n)
         rn += 1
         for row in p13n:
             bg  = '#f8f9fa' if rn % 2 else '#ffffff'
             ctr = sf(row,'ctr'); imp = sf(row,'imp_m'); sov = sf(row,'sov_pct')
+            imp_abs = sf(row,'imp')
             cc  = '#16a34a' if ctr >= bl_p13n else '#dc2626'
             atc = sf(row,'atc_rate')
             html += (
@@ -583,6 +587,7 @@ def render_sig_table(data, selected_messages=None):
                 f'<span style="background:#3b82f6;color:white;border-radius:3px;'
                 f'padding:1px 5px;font-size:9px;">P13N</span></td>'
                 f'<td {_TDL}>{row.get("display_label","—")}</td>'
+                f'<td {_TD}>{imp_abs:,.0f}</td>'
                 f'<td {_TD}>{sov:.1f}%</td>'
                 f'<td style="padding:7px 12px;text-align:center;{_BD}font-weight:700;color:{cc};">{ctr:.2f}%</td>'
                 f'<td {_TD}>{atc:.1f}</td>'
@@ -593,13 +598,15 @@ def render_sig_table(data, selected_messages=None):
     # ── Site Merch section ────────────────────────────────────────────
     if merch:
         m_atc = (sum(sf(r,'imp_m')*sf(r,'atc_rate') for r in merch)/m_imp) if m_imp else 0
-        html += total_row('⬡ Site Merch Total', m_sov, m_ctr, m_atc, bl_merch)
+        m_imp_abs = sum(sf(r,'imp') for r in merch)
+        html += total_row('⬡ Site Merch Total', m_imp_abs, m_sov, m_ctr, m_atc, bl_merch)
         rn += 1
         for cn, rows in merch_cars.items():
             n = len(rows)
             for j, row in enumerate(rows):
                 bg  = '#f8f9fa' if rn % 2 else '#ffffff'
                 ctr = sf(row,'ctr'); imp = sf(row,'imp_m'); sov = sf(row,'sov_pct')
+                imp_abs = sf(row,'imp')
                 cc  = '#16a34a' if ctr >= bl_merch else '#dc2626'
                 if j == 0:
                     ctd = (
@@ -615,6 +622,7 @@ def render_sig_table(data, selected_messages=None):
                 html += (
                     f'<tr style="background:{bg};">{ctd}'
                     f'<td {_TDL}>{row.get("display_label","—")}</td>'
+                    f'<td {_TD}>{imp_abs:,.0f}</td>'
                     f'<td {_TD}>{sov:.1f}%</td>'
                     f'<td style="padding:7px 12px;text-align:center;{_BD}font-weight:700;color:{cc};">{ctr:.2f}%</td>'
                     f'<td {_TD}>{atc:.1f}</td>'
@@ -631,9 +639,11 @@ def render_sig_table(data, selected_messages=None):
     # Use weighted average of baselines for grand total color
     gt_bl = (bl_p13n * p_imp + bl_merch * m_imp) / gt_imp if gt_imp else bl_merch
     gt_color = '#16a34a' if gt_ctr >= gt_bl else '#dc2626'
+    gt_imp_abs = sum(sf(r,'imp') for r in p13n+merch)
     html += (
         f'<tr style="background:#f1f5f9;font-weight:800;font-size:13px;border-top:3px solid #041e42;">'
         f'<td colspan="2" style="padding:10px 14px;border:1px solid #cbd5e1;">GRAND TOTAL</td>'
+        f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;">{gt_imp_abs:,.0f}</td>'
         f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;">100%</td>'
         f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;color:{gt_color};">{gt_ctr:.2f}%</td>'
         f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;">{gt_atc_rate:.1f}</td>'
