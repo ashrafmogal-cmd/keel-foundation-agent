@@ -622,17 +622,21 @@ def render_sig_table(data, selected_messages=None):
                 )
                 rn += 1
 
-    # ── Grand total — no single benchmark applies; show both ──────────
+    # ── Grand total — no single benchmark applies; use weighted average ──────────
     gt_imp = p_imp + m_imp
     gt_clk = sum(sf(r,'imp_m')*sf(r,'ctr')/100 for r in p13n+merch)
+    gt_atc = sum(sf(r,'imp_m')*sf(r,'atc_rate') for r in p13n+merch)
     gt_ctr = (gt_clk/gt_imp*100) if gt_imp else 0
+    gt_atc_rate = (gt_atc/gt_imp) if gt_imp else 0
+    # Use weighted average of baselines for grand total color
+    gt_bl = (bl_p13n * p_imp + bl_merch * m_imp) / gt_imp if gt_imp else bl_merch
+    gt_color = '#16a34a' if gt_ctr >= gt_bl else '#dc2626'
     html += (
         f'<tr style="background:#f1f5f9;font-weight:800;font-size:13px;border-top:3px solid #041e42;">'
         f'<td colspan="2" style="padding:10px 14px;border:1px solid #cbd5e1;">GRAND TOTAL</td>'
-        f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;">{gt_imp:.1f}M</td>'
         f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;">100%</td>'
-        f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;">{bl:.2f}%</td>'
-        f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;color:{gc};">{gt_ctr:.2f}%</td>'
+        f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;color:{gt_color};">{gt_ctr:.2f}%</td>'
+        f'<td style="padding:10px 14px;text-align:center;border:1px solid #cbd5e1;">{gt_atc_rate:.1f}</td>'
         f'</tr>'
     )
     html += f'</tbody></table></div>{VAR_JS}'
@@ -724,11 +728,11 @@ def flatten_for_excel(data, module):
                 cn=r['carousel_nm']
                 if cn not in cars: cars[cn]=[]
                 cars[cn].append(r)
+            bl_merch_f = float(merch[0].get('fytd_baseline_merch') or 0) if merch else 0
             rows.append({'_group':'Site Merch Total','_label':'','imp_m':mi,
                          'sov_pct':round(mi/total_imp*100,1) if total_imp else 0,
-                         'ctr':(mc/mi*100) if mi else 0,'_is_total':True,'_bg':'FFF0FAF0','_fg':'FF041E42'})
-            bl_merch_f = float(merch[0].get('fytd_baseline_merch') or 0) if merch else 0
-            rows[-len(merch)-1]['fytd_baseline'] = bl_merch_f  # update Site Merch total row
+                         'ctr':(mc/mi*100) if mi else 0,'_is_total':True,
+                         'fytd_baseline':bl_merch_f,'_bg':'FFF0FAF0','_fg':'FF041E42'})
             for cn,crows in cars.items():
                 for r in crows:
                     rows.append({**r,'_group':cn,'_label':r.get('display_label',''),
