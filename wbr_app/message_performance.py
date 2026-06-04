@@ -84,6 +84,7 @@ def get_hpov_data(start, end, language='English', services_m0=None):
     m0t AS (SELECT m0_group, SUM(imp) AS m0_imp FROM curr GROUP BY m0_group),
     gt  AS (SELECT SUM(imp) AS total FROM curr)
     SELECT c.m0_group, c.msg AS message_name,
+      c.imp AS imp,
       ROUND(c.imp / 1000000, 2) AS imp_m, ROUND(c.ctr, 2) AS ctr,
       ROUND(c.atc_rate, 2) AS atc_rate,
       ROUND(c.imp  / g.total * 100, 1) AS sov_pct,
@@ -669,8 +670,8 @@ def build_excel(rows, mod, bl, start, end, proj_map=None):
         ws['A2'] = f'FYTD CTR Baseline: {bl:.2f}% | Merch only | App iOS + Android | SOV Projected column is editable'
         ws['A2'].font = Font(size=10, color='FF555555')
         ws['A2'].alignment = Alignment(horizontal='center')
-        headers = ['Group','Message / Asset','Impressions (M)','SOV %','SOV Projected (%)','SOV Variance','FYTD CTR Baseline','CTR %']
-        col_w   = [30, 38, 16, 10, 18, 14, 18, 10]
+        headers = ['Group','Message / Asset','Impressions','SOV %','SOV Projected (%)','SOV Variance','FYTD CTR Baseline','CTR %']
+        col_w   = [30, 38, 18, 10, 18, 14, 18, 10]
         for i,(h,w) in enumerate(zip(headers, col_w), start=1):
             c=ws.cell(row=3,column=i,value=h)
             c.font=Font(bold=True,color=W,size=11)
@@ -686,12 +687,13 @@ def build_excel(rows, mod, bl, start, end, proj_map=None):
             fn  = Font(bold=imt, size=11, color=row.get('_fg','FF000000'))
             vals= [row.get('_group',row.get('m0_group','')),
                    row.get('_label',row.get('message_name',row.get('display_label',''))),
-                   round(float(row.get('imp_m') or 0),2),
+                   int(round(float(row.get('imp') or 0))),
                    f'{sov:.1f}%','','',f'{bl:.2f}%',f'{ctr:.2f}%']
             for ci,val in enumerate(vals,start=1):
                 c=ws.cell(row=rn,column=ci,value=val)
                 c.fill=bg; c.font=fn; c.border=bdr
                 c.alignment=Alignment(horizontal='left' if ci<=2 else 'center',wrap_text=True)
+                if ci==3: c.number_format='#,##0'
                 if ci==8: c.font=Font(bold=True,size=11,color=GRN if ctr>=bl else RED)
         buf=BytesIO(); wb.save(buf); buf.seek(0); return buf
     except Exception as e: print(f'Excel err: {e}'); return None
@@ -708,8 +710,9 @@ def flatten_for_excel(data, module):
             groups[g]['rows'].append(r)
         for gn,gd in groups.items():
             gi=sum(sf(r,'imp_m') for r in gd['rows'])
+            gi_abs=sum(sf(r,'imp') for r in gd['rows'])
             gc=sum(sf(r,'imp_m')*sf(r,'ctr')/100 for r in gd['rows'])
-            rows.append({'_group':gn,'_label':'','imp_m':gi,
+            rows.append({'_group':gn,'_label':'','imp_m':gi,'imp':gi_abs,
                          'sov_pct':gd['m0_sov'],'ctr':(gc/gi*100) if gi else 0,
                          '_is_total':True,'_bg':'FFF0F4FF','_fg':'FF041E42'})
             for r in gd['rows']:
@@ -721,9 +724,10 @@ def flatten_for_excel(data, module):
         total_imp=sum(sf(r,'imp_m') for r in data)
         if p13n:
             pi=sum(sf(r,'imp_m') for r in p13n)
+            pi_abs=sum(sf(r,'imp') for r in p13n)
             pc=sum(sf(r,'imp_m')*sf(r,'ctr')/100 for r in p13n)
             bl_p13n_f = float(p13n[0].get('fytd_baseline_p13n') or 0) if p13n else 0
-            rows.append({'_group':'P13N Total','_label':'','imp_m':pi,
+            rows.append({'_group':'P13N Total','_label':'','imp_m':pi,'imp':pi_abs,
                          'sov_pct':round(pi/total_imp*100,1) if total_imp else 0,
                          'ctr':(pc/pi*100) if pi else 0,'_is_total':True,
                          'fytd_baseline':bl_p13n_f,'_bg':'FFE8F0FC','_fg':'FF041E42'})
@@ -732,6 +736,7 @@ def flatten_for_excel(data, module):
                              '_is_total':False,'fytd_baseline':bl_p13n_f,'_bg':'FFFFFFFF'})
         if merch:
             mi=sum(sf(r,'imp_m') for r in merch)
+            mi_abs=sum(sf(r,'imp') for r in merch)
             mc=sum(sf(r,'imp_m')*sf(r,'ctr')/100 for r in merch)
             cars=OrderedDict()
             for r in merch:
@@ -739,7 +744,7 @@ def flatten_for_excel(data, module):
                 if cn not in cars: cars[cn]=[]
                 cars[cn].append(r)
             bl_merch_f = float(merch[0].get('fytd_baseline_merch') or 0) if merch else 0
-            rows.append({'_group':'Site Merch Total','_label':'','imp_m':mi,
+            rows.append({'_group':'Site Merch Total','_label':'','imp_m':mi,'imp':mi_abs,
                          'sov_pct':round(mi/total_imp*100,1) if total_imp else 0,
                          'ctr':(mc/mi*100) if mi else 0,'_is_total':True,
                          'fytd_baseline':bl_merch_f,'_bg':'FFF0FAF0','_fg':'FF041E42'})
