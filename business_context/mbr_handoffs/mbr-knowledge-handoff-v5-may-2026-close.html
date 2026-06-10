@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>May 2026 MBR Session Handoff — Knowledge Transfer v5</title>
+<style>
+  :root{
+    --wm-blue:#0053e2;
+    --wm-blue-dark:#002d72;
+    --wm-blue-bg:#eff6ff;
+    --wm-yellow:#ffc220;
+    --wm-yellow-dark:#b8860b;
+    --wm-yellow-bg:#fffbeb;
+    --ink:#1a1a1a;
+    --ink-soft:#3b4252;
+    --muted:#5b6470;
+    --rule:#e3e6eb;
+    --green:#0a7d3b;
+    --red:#c0392b;
+    --bg:#f6f8fb;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 28px 96px}
+  header.banner{
+    background:linear-gradient(135deg,var(--wm-blue) 0%,var(--wm-blue-dark) 100%);
+    color:#fff;border-radius:14px;padding:28px 32px;margin-bottom:24px;
+    box-shadow:0 4px 18px rgba(0,40,120,.18);
+    border-top:6px solid var(--wm-yellow);
+  }
+  header.banner h1{margin:0 0 6px;font-size:28px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+  header.banner .meta{font-size:13.5px;opacity:.95}
+  header.banner .meta b{color:var(--wm-yellow)}
+  .toc{
+    background:var(--card);border:1px solid var(--rule);border-radius:12px;
+    padding:18px 22px;margin-bottom:24px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .toc h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--wm-blue-dark)}
+  .toc ol{margin:0;padding-left:22px;columns:2;column-gap:24px;font-size:14px}
+  .toc ol li{margin:3px 0;break-inside:avoid}
+  .toc a{color:var(--ink-soft);text-decoration:none;border-bottom:1px dotted transparent}
+  .toc a:hover{color:var(--wm-blue);border-bottom-color:var(--wm-blue)}
+  section{
+    background:var(--card);border:1px solid var(--rule);border-radius:12px;
+    padding:22px 26px;margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  h2{
+    margin:0 0 14px;font-size:21px;color:var(--wm-blue-dark);font-weight:700;
+    padding-bottom:8px;border-bottom:3px solid var(--wm-yellow);letter-spacing:-.01em;
+  }
+  h3{margin:18px 0 8px;font-size:16.5px;color:var(--wm-blue);font-weight:700}
+  h4{margin:14px 0 6px;font-size:14.5px;color:var(--ink-soft);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0;padding-left:22px}
+  ul li,ol li{margin:3px 0}
+  hr.spacer{border:none;border-top:1px dashed var(--rule);margin:18px 0}
+  a{color:var(--wm-blue)}
+  code{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;background:#f1f4f9;padding:1px 6px;border-radius:4px;color:var(--ink)}
+  pre{background:#0f1830;color:#e6ecf7;padding:16px 18px;border-radius:10px;overflow-x:auto;font-size:12.5px;line-height:1.5;border-left:4px solid var(--wm-yellow)}
+  pre code{background:transparent;padding:0;color:inherit;font-size:inherit}
+
+  /* Tables */
+  table{width:100%;border-collapse:collapse;margin:10px 0 14px;font-size:13.5px;background:#fff}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{background:var(--wm-blue-bg);color:var(--wm-blue-dark);font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
+  tbody tr:hover{background:#fafbfd}
+  .kpi td,.kpi th{font-variant-numeric:tabular-nums}
+  .kpi td.num,.kpi th.num{text-align:right}
+  .up{color:var(--green);font-weight:700}
+  .down{color:var(--red);font-weight:700}
+  tr.grand-total td{background:#fff8e1;font-weight:700;border-top:2px solid var(--wm-yellow);border-bottom:2px solid var(--wm-yellow)}
+
+  /* Callouts */
+  .callout{
+    border-left:5px solid var(--wm-blue);background:var(--wm-blue-bg);
+    padding:12px 16px;border-radius:8px;margin:12px 0;font-size:14px;
+  }
+  .callout.warn{border-left-color:var(--wm-yellow-dark);background:var(--wm-yellow-bg)}
+  .callout.ok{border-left-color:var(--green);background:#e8f5ee}
+  .callout b{color:var(--wm-blue-dark)}
+  .callout.warn b{color:var(--wm-yellow-dark)}
+
+  /* RAG/owner pills */
+  .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.02em;color:#fff}
+  .pill.blue{background:var(--wm-blue)}
+  .pill.gold{background:var(--wm-yellow-dark)}
+  .pill.green{background:var(--green)}
+  .pill.red{background:var(--red)}
+  .pill.grey{background:#5b6470}
+  .owner-pill{display:inline-block;padding:8px 12px;border-radius:6px;font-size:12.5px;font-weight:700;color:#fff;margin-top:10px}
+  .owner-pill.blue{background:var(--wm-blue)}
+  .owner-pill.gold{background:var(--wm-yellow-dark)}
+
+  /* Two engines side-by-side */
+  .engines{
+    display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch;margin:14px 0;
+  }
+  .engine{
+    display:flex;flex-direction:column;border:2px solid var(--wm-blue);border-radius:10px;
+    background:var(--wm-blue-bg);padding:18px;
+  }
+  .engine.gold{border-color:var(--wm-yellow-dark);background:var(--wm-yellow-bg)}
+  .engine .etitle{font-size:17px;font-weight:700;color:var(--wm-blue-dark);margin:0 0 4px}
+  .engine.gold .etitle{color:var(--wm-yellow-dark)}
+  .engine .esub{font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--muted);margin-bottom:10px}
+  .engine .persona{min-height:4.5em;font-size:14px;color:var(--ink-soft);margin:0 0 10px}
+  .engine .strat-h{font-size:13px;text-transform:uppercase;letter-spacing:.05em;font-weight:700;color:var(--ink);margin:8px 0 6px}
+  .engine ul{margin:0 0 12px;padding-left:18px;font-size:13.5px}
+  .engine .body-col{display:flex;flex-direction:column;flex:1}
+  .engine .pin-bottom{margin-top:auto}
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 14px}
+  .stat{background:#fff;border-radius:8px;padding:10px 8px;text-align:center;border:1px solid var(--rule)}
+  .stat .big{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--wm-blue-dark)}
+  .engine.gold .stat .big{color:var(--wm-yellow-dark)}
+  .stat .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:2px}
+
+  /* Mini cards */
+  .mini-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0}
+  .mini-card{border:1px solid var(--rule);border-left:4px solid var(--wm-blue);background:#fff;border-radius:8px;padding:12px 14px}
+  .mini-card.gold{border-left-color:var(--wm-yellow-dark)}
+  .mini-card .mc-t{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
+  .mini-card .mc-v{font-size:18px;font-weight:700;color:var(--wm-blue-dark);margin-top:4px}
+
+  /* Section anchor offset */
+  section[id]{scroll-margin-top:20px}
+
+  /* footer */
+  footer{margin-top:30px;padding-top:18px;border-top:2px solid var(--wm-yellow);text-align:center;color:var(--muted);font-size:13px}
+  footer b{color:var(--wm-blue-dark)}
+
+  @media (max-width:780px){
+    .engines{grid-template-columns:1fr}
+    .toc ol{columns:1}
+    .wrap{padding:18px 14px 64px}
+    header.banner{padding:20px}
+    header.banner h1{font-size:22px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <h1>May 2026 MBR Session Handoff — Knowledge Transfer v5</h1>
+    <div class="meta">
+      <b>Generated:</b> 2026-06-10 &nbsp;·&nbsp;
+      <b>Author:</b> Fola 📝 (via a0d0rlq) &nbsp;·&nbsp;
+      <b>Supersedes:</b> mbr-knowledge-handoff-v4
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#s1">Session Context</a></li>
+      <li><a href="#s2">Final Published Artifact</a></li>
+      <li><a href="#s3">The Big Story — Customer Cohort Split</a></li>
+      <li><a href="#s4">Two Growth Engines Framework — LOCKED</a></li>
+      <li><a href="#s5">New MBR Structure — 7 Sections</a></li>
+      <li><a href="#s6">Methodology Locks Ratified</a></li>
+      <li><a href="#s7">Director Feedback Patterns — May 2026</a></li>
+      <li><a href="#s8">Process Lessons Learned</a></li>
+      <li><a href="#s9">Open Items / Pending Escalations</a></li>
+      <li><a href="#s10">June MBR Prep Notes</a></li>
+      <li><a href="#s11">Cross-Reference Index — MBR + WBR</a></li>
+      <li><a href="#s12">SQL Patterns Added This Cycle</a></li>
+      <li><a href="#s13">Reference URLs</a></li>
+    </ol>
+  </nav>
+
+  <section id="s1">
+    <h2>1. Session Context</h2>
+    <p>The May 2026 MBR cycle was the first MBR to feature the new <b>Customer Cohort split on Homepage</b> (implemented mid-May 2026, owned by Customer Strategy team). This handoff captures all ratified knowledge from the v11 → v16 iteration cycle and establishes the framework that will recur from June 2026 MBR onward.</p>
+    <h4>Key session outcomes</h4>
+    <ul>
+      <li>New MBR §4 "Customer Cohorts Strategy" framework ratified</li>
+      <li>Two Growth Engines model (Monthly = Efficiency Driver / Weekly+Bi-Weekly = Volume Driver) locked</li>
+      <li>Owner-team accountability pattern introduced (Site Optimization vs Site Content)</li>
+      <li>5 Director feedback patterns documented (move section, single visual, align table, combine cohorts, change label)</li>
+      <li>Fola system prompt updated with Section 11 (683 total system_prompt elements)</li>
+      <li>Fola published to Puppy Marketplace</li>
+    </ul>
+  </section>
+
+  <section id="s2">
+    <h2>2. Final Published Artifact</h2>
+    <table class="kpi">
+      <thead><tr><th>Item</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Final URL</td><td><code>https://puppy.walmart.com/sharing/a0d0rlq/may-2026-mbr-homepage</code></td></tr>
+        <tr><td>Final version</td><td><b class="up">v16</b></td></tr>
+        <tr><td>Total sections</td><td>7 (was 6 in April 2026 MBR)</td></tr>
+        <tr><td>Iteration count</td><td>5 version bumps post-initial (v11 → v16)</td></tr>
+        <tr><td>Director-approved</td><td><span class="pill green">Yes</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Version trail</h3>
+    <ul>
+      <li><b>v11</b> — initial May MBR (6-section structure inherited from April)</li>
+      <li><b>v12</b> — added Customer Growth Strategies as §6 (between SIG and Appendix)</li>
+      <li><b>v13</b> — split into Two Growth Engines visual (Monthly Efficiency Driver vs Weekly/Bi-Weekly Volume Driver)</li>
+      <li><b>v14</b> — repositioned to §4 (before HPOV); HPOV → §5, SIG → §6; added cohort definitions to §7 Appendix</li>
+      <li><b>v15</b> — Casual range corrected to 2–11 weeks; "Read:" → "Callout:" label rename</li>
+      <li><b>v16</b> — §4b two-engine visual alignment fix (CSS Grid + flex stretch + min-height + margin-top:auto)</li>
+    </ul>
+  </section>
+
+  <section id="s3">
+    <h2>3. The Big Story — Customer Cohort Split</h2>
+    <p>Mid-May 2026, the HP Customer Cohort split went live. Cohorts are owned by Customer Strategy team, based on online purchase frequency in trailing year:</p>
+
+    <table class="kpi">
+      <thead>
+        <tr>
+          <th>Cohort</th><th>Definition</th><th class="num">May SOV</th><th>Strategic Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Weekly / Bi-Weekly</td><td>≥24 unique purchase weeks/year</td><td class="num"><b>45.2%</b></td><td>💎 <b>Volume Driver (GOATs)</b></td></tr>
+        <tr><td>Casual</td><td>2–11 unique purchase weeks/year</td><td class="num">23.3%</td><td>Services over-indexer</td></tr>
+        <tr><td>Monthly</td><td>12–23 unique purchase weeks/year</td><td class="num">16.7%</td><td>📈 <b>Efficiency Driver</b></td></tr>
+        <tr><td>New To Walmart</td><td>0 or 1 purchases</td><td class="num">14.8%</td><td>Acquisition funnel</td></tr>
+      </tbody>
+    </table>
+
+    <h3>May 2026 cohort performance snapshot</h3>
+    <table class="kpi">
+      <thead>
+        <tr>
+          <th>Cohort</th><th class="num">CTR</th><th class="num">ATC/1K</th><th class="num">GMV ($M)</th>
+          <th class="num">ExpDel</th><th class="num">GMF</th><th class="num">OG</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Casual</td><td class="num">2.45%</td><td class="num">7.29</td><td class="num">$18.2</td><td class="num"><b class="up">16,043</b></td><td class="num">2,449</td><td class="num">6,725</td></tr>
+        <tr><td>Monthly</td><td class="num"><b class="up">3.34%</b></td><td class="num"><b class="up">10.34</b></td><td class="num">$17.9</td><td class="num">4,831</td><td class="num">173</td><td class="num">54</td></tr>
+        <tr><td>New To Walmart</td><td class="num">1.29%</td><td class="num">1.83</td><td class="num">$3.4</td><td class="num">8,800</td><td class="num"><b class="up">14,115</b></td><td class="num"><b class="up">21,265</b></td></tr>
+        <tr><td>Weekly/Bi-Weekly</td><td class="num">2.87%</td><td class="num">8.90</td><td class="num"><b class="up">$58.4</b></td><td class="num">2,874</td><td class="num">36</td><td class="num">2</td></tr>
+        <tr class="grand-total"><td>Blended</td><td class="num">2.61%</td><td class="num">7.57</td><td class="num">$77.8</td><td class="num">32,548</td><td class="num">16,773</td><td class="num">28,046</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <b>The headline insight:</b> Monthly Customers convert ~30%+ more efficiently per impression than blended, but receive only 16.7% SOV — the cleanest efficiency arbitrage on the page. <b>Counterfactual:</b> upweighting Monthly to 25% SOV unlocks an estimated <b>+2–4M incremental ATC/month</b>.
+    </div>
+  </section>
+
+  <section id="s4">
+    <h2>4. Two Growth Engines Framework — LOCKED</h2>
+
+    <div class="engines">
+      <!-- Monthly engine -->
+      <div class="engine">
+        <div class="etitle">📈 Monthly Customers</div>
+        <div class="esub">Efficiency Driver</div>
+
+        <div class="stat-row">
+          <div class="stat"><div class="big">16.7%</div><div class="lbl">SOV</div></div>
+          <div class="stat"><div class="big">3.34%</div><div class="lbl">CTR</div></div>
+          <div class="stat"><div class="big">10.34</div><div class="lbl">ATC/1K</div></div>
+        </div>
+
+        <div class="body-col">
+          <p class="persona"><b>Persona:</b> Mission-driven visitors with clear intent. Convert efficiently on strong VP, not more content.</p>
+
+          <div class="strat-h">Strategy: Reinforce the Value Proposition</div>
+          <ul>
+            <li><b>Speed</b> — fast-fulfillment hooks (Get-It-Fast, Express Delivery, In-Store Pickup)</li>
+            <li><b>Great Pricing</b> — Rollbacks, Groceries Under $X, value-led merch</li>
+            <li><b>Enhanced W+ Visibility</b> — Card 1 W+ messaging + BTF banner</li>
+            <li><b>Item-Dense Page Composition</b> — more items per fold, denser ItemCarousel exposure</li>
+          </ul>
+
+          <div class="pin-bottom">
+            <div class="owner-pill blue">🏗️ Owned by: Home Page Features &amp; Site Optimization</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly/Bi-Weekly engine -->
+      <div class="engine gold">
+        <div class="etitle">💎 Weekly / Bi-Weekly</div>
+        <div class="esub">Volume Driver — The GOATs</div>
+
+        <div class="stat-row">
+          <div class="stat"><div class="big">45.2%</div><div class="lbl">SOV</div></div>
+          <div class="stat"><div class="big">2.87%</div><div class="lbl">CTR</div></div>
+          <div class="stat"><div class="big">$58.4M</div><div class="lbl">GMV</div></div>
+        </div>
+
+        <div class="body-col">
+          <p class="persona"><b>Persona:</b> Already engaged regular visitors. Reward depth and variety, not value reinforcement.</p>
+
+          <div class="strat-h">Strategy: Maximize Engagement &amp; Conversion on the Edges</div>
+          <ul>
+            <li><b>Active Content Engagement</b> — dynamic, discovery-oriented content</li>
+            <li><b>Dial Up Services Offerings</b> — expand ExpDel/OG/Subs/ACC surface area</li>
+            <li><b>Drive Conversion on the Edges</b> — optimize ATF tail (Card 5) and BTF</li>
+          </ul>
+
+          <div class="pin-bottom">
+            <div class="owner-pill gold">✍️ Owned by: Site Content Team</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Casual + NTW — continuing playbooks, footnoted in MBR §4</h3>
+    <div class="mini-grid">
+      <div class="mini-card">
+        <div class="mc-t">Casual</div>
+        <div class="mc-v">Services Over-Indexer</div>
+        <p style="margin:6px 0 0;font-size:13px;color:var(--ink-soft)">49% of ExpDel on 23% SOV (~2× over-index). Test services-creative concentration.</p>
+      </div>
+      <div class="mini-card gold">
+        <div class="mc-t">New To Walmart</div>
+        <div class="mc-v">Acquisition Funnel</div>
+        <p style="margin:6px 0 0;font-size:13px;color:var(--ink-soft)">84% GMF + 76% OG activations. Measure on GMF/OG rate, <b>never</b> on CTR/ATC.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s5">
+    <h2>5. New MBR Structure — 7 Sections (Locked)</h2>
+    <table class="kpi">
+      <thead>
+        <tr><th class="num">§</th><th>Section</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="num">1</td><td>Executive Summary</td><td>1-sentence headliner + pillar bullets + scorecard</td></tr>
+        <tr><td class="num">2</td><td>Executive Roadmap Review</td><td>Mark's input + monthly launch context</td></tr>
+        <tr><td class="num">3</td><td>Business Performance — Headlines</td><td>Sentence-form drivers per metric + module table</td></tr>
+        <tr><td class="num">4</td><td><b>Customer Cohorts Strategy</b></td><td><span class="pill blue">NEW</span> 4a snapshot table + 4b two-engine visual</td></tr>
+        <tr><td class="num">5</td><td>HPOV Deep Dive</td><td>Total perf table + top/bottom messages</td></tr>
+        <tr><td class="num">6</td><td>SIG ATF Deep Dive</td><td>Total perf + Site Merch top 5 by CTR</td></tr>
+        <tr><td class="num">7</td><td>Appendix — Definitions</td><td>Cohort defs + standard appendix items</td></tr>
+      </tbody>
+    </table>
+    <div class="callout warn">
+      <b>Recurring layout rule:</b> Customer Cohorts always sits between Business Performance and HPOV. Definitions live in Appendix only — never duplicated in §4 footnote.
+    </div>
+  </section>
+
+  <section id="s6">
+    <h2>6. Methodology Locks Ratified This Session</h2>
+
+    <h3>Customer Cohort Definitions</h3>
+    <ul>
+      <li><b>Weekly / Bi-Weekly:</b> ≥24 unique purchase weeks/year (combines old Weekly 48+ and Bi-Weekly 24–47)</li>
+      <li><b>Monthly:</b> 12–23 unique purchase weeks/year</li>
+      <li><b>Casual:</b> 2–11 unique purchase weeks/year <span class="pill grey">2-week floor, not 1</span></li>
+      <li><b>New To Walmart:</b> 0 or 1 purchases</li>
+    </ul>
+
+    <h3>Cohort Snapshot Table — Locked Column Set</h3>
+    <p><code>Cohort | SOV | Impressions | CPTS | CTR | ATC/1K | GMV ($M) | ExpDel | GMF | OG</code></p>
+    <ul>
+      <li>Use <code>.kpi</code> table class</li>
+      <li>Highlight winning metrics with <code>.up</code> (green bold)</li>
+      <li>Append Blended row using <code>.grand-total</code> styling</li>
+      <li>Always include Casual + NTW even when narrative focuses on Monthly + Weekly/Bi-Weekly</li>
+    </ul>
+
+    <h3>Two-Engine Visual — Implementation Pattern</h3>
+    <ul>
+      <li>Parent: <code>display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:stretch</code></li>
+      <li>Each card: <code>display:flex; flex-direction:column; border:2px solid &lt;theme&gt;; border-radius:10px</code></li>
+      <li>Stat row: 3-column CSS grid with <code>tabular-nums</code> for big numbers</li>
+      <li>Body: flex column with <code>flex:1</code> so pills bottom-anchor via <code>margin-top:auto</code></li>
+      <li>Persona paragraph: <code>min-height:4.5em</code> keeps STRATEGY headers cross-aligned</li>
+      <li>Color themes: Monthly = <code>#0053e2</code> blue + <code>#eff6ff</code> bg | Weekly/Bi-Weekly = <code>#b8860b</code> gold + <code>#fffbeb</code> bg</li>
+    </ul>
+
+    <h3>Section Insight Labels — Locked</h3>
+    <ul>
+      <li><b>'Callout:'</b> — preferred for mid-section insight callouts inline within body paragraphs</li>
+      <li><b>'Takeaway:'</b> — acceptable for section-opener summary insights (1-line)</li>
+      <li><span class="pill red">AVOID</span> <b>'Read:'</b> — deprecated May 2026 (too instructional)</li>
+    </ul>
+
+    <h3>Owner-Team Accountability — Locked</h3>
+    <ul>
+      <li>Embed explicit owner-team labels in strategic recommendations + visuals</li>
+      <li>Color-coded pills matching section/cohort visual</li>
+      <li>Standard recurring owners: Home Page Features, Site Optimization, Site Content, Customer Strategy, WMC, W+ Team, Hero Carousel Product, Merch Ops, Marketing/SEO, Instrumentation Eng</li>
+      <li>Pill pattern: <code>&lt;div style="background:&lt;color&gt;; color:white; padding:10px 14px; border-radius:6px; font-size:13px; font-weight:600; display:inline-block;"&gt;🏗️ Owned by: &lt;Team&gt;&lt;/div&gt;</code></li>
+    </ul>
+  </section>
+
+  <section id="s7">
+    <h2>7. Director Feedback Patterns — May 2026 Additions</h2>
+    <p>Five new patterns observed this cycle (now in Fola Section 11):</p>
+    <table class="kpi">
+      <thead>
+        <tr><th class="num">#</th><th>Pattern</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="num">1</td><td><b>"Move this section to before X"</b></td><td>Renumber downstream h2 + h3 (4a/4b → 5a/5b) + cross-references; verify in pre-publish grep</td></tr>
+        <tr><td class="num">2</td><td><b>"Just create a good visual for this strategy"</b></td><td>Prefer strong visual storytelling over multi-table/list combos. Build side-by-side comparison cards.</td></tr>
+        <tr><td class="num">3</td><td><b>"Align the table"</b></td><td>CSS Grid with <code>align-items:stretch</code> + <code>margin-top:auto</code> on pinned bottom elements + <code>min-height</code> on variable-length text</td></tr>
+        <tr><td class="num">4</td><td><b>"Combine these two cohorts/segments"</b></td><td>Update both live tables AND Appendix definitions in same publish cycle</td></tr>
+        <tr><td class="num">5</td><td><b>"Change the label"</b></td><td>Standalone version bump; verify replacement count matches occurrence count</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Section Moves + Renumbering Workflow</h3>
+    <ol>
+      <li>Cut entire section block (h2 + all h3 + trailing <code>&lt;hr class="spacer"&gt;</code>)</li>
+      <li>Renumber section's own h2 + sub-headings</li>
+      <li>Insert at new position</li>
+      <li>Renumber ALL downstream h2 sections AND h3 sub-headings</li>
+      <li>Grep for cross-references using old section numbers; update</li>
+      <li>Update TOC if present</li>
+      <li>Verify with grep: zero occurrences of old section numbers in h2/h3 contexts</li>
+    </ol>
+  </section>
+
+  <section id="s8">
+    <h2>8. Process Lessons Learned</h2>
+    <ol>
+      <li><b>Plan for 5–7 director-edit cycles per MBR section refresh</b> — May 2026 had 5 version bumps post-initial (v11 → v16). Common cadence: add new content → reframe → reposition → polish labels/alignment → final lock.</li>
+      <li><b>File-based publish for share-puppy is non-negotiable</b> — write to disk, verify with grep, then upload. Paste-through still introduces typos in long blocks.</li>
+      <li><b>Single-visual &gt; multi-table-and-list combos</b> when communicating strategic dichotomies. Directors consistently prefer one strong visual to three smaller assets.</li>
+      <li><b>Owner-team accountability transforms strategy from analysis to action</b> — adding the owner pill makes recommendations actionable rather than observational.</li>
+      <li><b>Cohort definitions belong in Appendix, not in section narrative</b> — keeps deep dive sections strategic, not definitional.</li>
+      <li><b>CSS Grid + flex stretch is the answer to alignment</b> — flexbox wrap leaves cards unequal height; grid with <code>align-items:stretch</code> + <code>margin-top:auto</code> on pinned bottom elements is the locked pattern.</li>
+      <li><b>Casual cohort starts at 2 weeks, not 1</b> — the 1-week floor would overlap NTW's "0 or 1 purchases" definition. Always cross-check cohort boundaries for non-overlapping coverage.</li>
+    </ol>
+  </section>
+
+  <section id="s9">
+    <h2>9. Open Items / Pending Escalations</h2>
+    <table class="kpi">
+      <thead>
+        <tr><th class="num">#</th><th>Item</th><th>Owner</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="num">1</td><td>Message × Cohort cross-tab analysis</td><td>Fola / BA&amp;I</td><td><span class="pill gold">Pending</span> — needed to identify which messages drive Monthly cohort efficiency</td></tr>
+        <tr><td class="num">2</td><td>Monthly upweight A/B test design</td><td>Site Optimization</td><td><span class="pill gold">Pending</span> — recommend +8.3 pts SOV shift with cannibalization measurement</td></tr>
+        <tr><td class="num">3</td><td>NTW attribution window validation</td><td>Instrumentation</td><td><span class="pill gold">Pending</span> — confirm GMF/OG flags use same-session vs 7/30-day window</td></tr>
+        <tr><td class="num">4</td><td>Cohort migration tracking</td><td>Customer Strategy</td><td><span class="pill gold">Pending</span> — does Monthly upweight move Casual → Monthly over time?</td></tr>
+        <tr><td class="num">5</td><td>Services-creative concentration test on Casual</td><td>Site Content + WMC</td><td><span class="pill gold">Pending</span> — amplify the 2× ExpDel over-index via Card 4 + BTF services modules</td></tr>
+        <tr><td class="num">6</td><td>June MBR baseline</td><td>Fola</td><td><span class="pill blue">Planned</span> — first full-month cohort attribution; flag May as preliminary</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="s10">
+    <h2>10. June MBR Prep Notes</h2>
+
+    <h3>Window</h3>
+    <ul>
+      <li>Period: <b>June 1 – June 30, 2026</b></li>
+      <li>First full-month cohort attribution baseline</li>
+      <li>Target publish: early July 2026</li>
+    </ul>
+
+    <h3>Standing items to re-baseline</h3>
+    <ul>
+      <li>Cohort SOV trajectory (did Monthly stay at 16.7% or did anyone act on the upweight rec?)</li>
+      <li>Monthly CTR/ATC trajectory (efficiency premium persisting at scale?)</li>
+      <li>Casual ExpDel share (did services concentration test launch?)</li>
+      <li>NTW GMF/OG activation rate (still 84% / 76%?)</li>
+      <li>W/BW GMV share (still ~75% of HP GMV?)</li>
+    </ul>
+
+    <h3>External context to ask user at session start</h3>
+    <ul>
+      <li>Sitewide traffic May → June</li>
+      <li>WMC canonical ad revenue $ (always pending until provided)</li>
+      <li>W+ Sign-Up Rate June (HPOV / Banner / Combined)</li>
+      <li>SOV bps movements per service line</li>
+      <li>Engineering ticket statuses (SIG tracking, Web Desktop bot cleanup)</li>
+      <li>Cohort split implementation status (any methodology adjustments by Customer Strategy?)</li>
+    </ul>
+
+    <h3>Pre-flight sanity queries</h3>
+    <ol>
+      <li>Reconcile May anchors: blended impressions, CPTS, ATC, GMV (per this handoff)</li>
+      <li>Cohort distribution in June: ensure 4 cohorts still defined the same way</li>
+      <li>Verify cohort field availability in <code>hp_summary_asset</code> or join requirement to a cohort-mapping table</li>
+    </ol>
+
+    <h3>New §4 standing structure (use as template)</h3>
+    <ul>
+      <li><b>§4a:</b> Cohort Performance Snapshot (10-column kpi table)</li>
+      <li><b>§4b:</b> Two Growth Engines (side-by-side cards) — keep Monthly + W/BW as the headline, Casual + NTW footnoted</li>
+      <li><b>Optional §4c:</b> any new diagnostic if cohort behavior shifts materially MoM</li>
+    </ul>
+
+    <h3>Recommended new MBR adds</h3>
+    <ul>
+      <li>Cohort SOV drift chart (May → June bar comparison)</li>
+      <li>Monthly upweight progress callout (if any movement)</li>
+      <li>New cohort migration metric if Customer Strategy team makes that available</li>
+    </ul>
+  </section>
+
+  <section id="s11">
+    <h2>11. Cross-Reference Index — MBR + WBR</h2>
+
+    <h3>From WBR (handoff v11, WK18) to MBR</h3>
+    <ul>
+      <li>HPOV Card 1 W+ vs Non-W+ decomposition methodology — applies to MBR HPOV deep dive</li>
+      <li>Web Desktop YoY = bot cleanup normalization framing — applies to MBR YoY comps</li>
+      <li>ItemCarousel concentration watch — applies to MBR module-type table</li>
+      <li>Merch-only HPOV exclusion set — applies to MBR top/bottom message tables</li>
+    </ul>
+
+    <h3>From MBR (this handoff) to WBR</h3>
+    <ul>
+      <li>Customer Cohorts framework — add cohort-decomposed mini-table to standard WBR §2 (June 2026+ when data consistently available)</li>
+      <li>Two Growth Engines owner accountability — reference in WBR recommendations</li>
+      <li>Cohort SOV drift as standing WBR watch item</li>
+    </ul>
+
+    <h3>Cross-cycle lessons</h3>
+    <ul>
+      <li>Asymmetric IIC methodology (clicks ex-IIC, activations with-IIC) applies to both WBR and MBR</li>
+      <li>Driver attribution as standard column applies to both</li>
+      <li>Director feedback cycle expectations: WBR = 5-7 iterations, MBR = 5-7 iterations</li>
+    </ul>
+  </section>
+
+  <section id="s12">
+    <h2>12. SQL Patterns Added This Cycle</h2>
+
+    <h3>Q-COHORT-SNAPSHOT — Customer Cohort Performance</h3>
+<pre><code>SELECT
+  customer_cohort,
+  SUM(module_view_count) AS impressions,
+  SAFE_DIVIDE(SUM(overall_click_count), SUM(hp_session_count)) * 1000 AS cpts,
+  SAFE_DIVIDE(SUM(overall_click_count), SUM(module_view_count)) * 100 AS ctr_pct,
+  SAFE_DIVIDE(SUM(total_atc_count), SUM(module_view_count)) * 1000 AS atc_per_1k,
+  SUM(total_gmv) AS gmv,
+  SUM(exp_del_activation_flag) AS exp_del,
+  SUM(gmf_activation_flag) AS gmf,
+  SUM(og_activation_flag) AS og
+FROM `wmt-site-content-strategy.scs_production.hp_summary_asset`
+WHERE session_start_dt BETWEEN '&lt;start&gt;' AND '&lt;end&gt;'
+  AND experience_lvl2 IN ('App: iOS','App: Android','Web: Desktop','Web: Mobile')
+  AND IFNULL(moduletype,'') NOT IN ('InteractiveImageCarousel','socialCarouselV2')
+GROUP BY customer_cohort;</code></pre>
+
+    <h3>Q-COHORT-MESSAGE — Message × Cohort cross-tab (for diagnostic Q in §9.1)</h3>
+    <p>Group by <code>(customer_cohort, message_name)</code> for top 20 messages by blended impressions. Returns which messages over-index for each cohort.</p>
+
+    <h3>Q-COHORT-MOM — Cohort drift MoM (June MBR+)</h3>
+    <p>Same shape as Q-COHORT-SNAPSHOT but with month-bucket case statement. Returns May vs June SOV, CTR, ATC/1K, activation share by cohort.</p>
+  </section>
+
+  <section id="s13">
+    <h2>13. Reference URLs</h2>
+    <table class="kpi">
+      <thead><tr><th>Resource</th><th>URL</th></tr></thead>
+      <tbody>
+        <tr><td>Final MBR (v16)</td><td><code>https://puppy.walmart.com/sharing/a0d0rlq/may-2026-mbr-homepage</code></td></tr>
+        <tr><td>Prior MBR handoff (v4)</td><td><code>https://puppy.walmart.com/sharing/a0d0rlq/mbr-knowledge-handoff-v4</code></td></tr>
+        <tr><td>WBR handoff (v11, WK18)</td><td><code>https://puppy.walmart.com/sharing/a0d0rlq/handoff-v11-wk18-2026-wbr-close</code></td></tr>
+        <tr><td>FY27 Homepage Goals</td><td>SharePoint: <code>FY27 Homepage Goals.xlsx</code> (GUID 3cab877d-78d0-4680-a6f1-264036b2cfb3)</td></tr>
+        <tr><td>Fola agent config</td><td><code>C:\Users\A0D0RLQ\.code_puppy\agents\fola.json</code> (683 system_prompt elements, Section 11 ratified)</td></tr>
+        <tr><td>Fola marketplace listing</td><td><code>https://puppy.walmart.com/marketplace/fola</code> (pending publish confirmation)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    <p><b>End of handoff v5.</b> Carry this knowledge into June 2026 MBR session as canonical reference. Update to v6 at June MBR close.</p>
+  </footer>
+
+</div>
+</body>
+</html>
