@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>April 2026 — Nav Deep Dive</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#F4F6F8;color:#1a1a1a;font-size:14px}
+  .hdr{background:#0071CE;color:#fff;padding:22px 36px 14px}
+  .hdr-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .h1{font-size:1.55rem;font-weight:800;letter-spacing:-.3px}
+  .hsub{font-size:.83rem;opacity:.8;margin-top:4px}
+  .hbadge{background:#ffffff22;border:1px solid #ffffff44;border-radius:20px;padding:4px 14px;font-size:.73rem;font-weight:600}
+  .ybar{height:4px;background:#FFC220;margin-top:14px;border-radius:2px}
+  .page{max-width:1280px;margin:0 auto;padding:26px 18px}
+  .stitle{font-size:1.15rem;font-weight:800;color:#0071CE;margin-bottom:3px}
+  .ssub{font-size:.8rem;color:#666;margin-bottom:14px}
+  .divider{height:2px;background:linear-gradient(90deg,#0071CE,#FFC220);border-radius:1px;margin:28px 0 18px}
+  .irow4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .icard{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+  .krow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+  .kpanel{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+  .khdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-left:10px}
+  .kgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .kc{background:#f8f9fb;border-radius:8px;padding:11px 13px}
+  .kl{font-size:.73rem;color:#888;margin-bottom:3px}
+  .kv{font-size:1.4rem;font-weight:800;color:#1a1a1a;margin-bottom:3px}
+  .badge{display:inline-block;border-radius:20px;padding:2px 8px;font-size:.73rem;font-weight:600}
+  .crow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+  .card{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+  .ctitle{font-weight:700;font-size:.93rem;color:#1a1a1a;margin-bottom:2px}
+  .csub{font-size:.74rem;color:#888;margin-bottom:10px}
+  .barchart{display:flex;flex-direction:column;gap:3px}
+  .br{display:flex;align-items:center;gap:0;height:22px}
+  .bpct-left{font-size:.72rem;font-weight:700;white-space:nowrap;min-width:52px;text-align:left}
+  .bl{font-size:.76rem;color:#333;white-space:nowrap;min-width:160px;text-align:right;padding-right:8px}
+  .barwrap{flex:1;height:14px;position:relative;display:flex;align-items:center}
+  .bar{height:14px;border-radius:3px;min-width:3px}
+  .bar-red{background:linear-gradient(270deg,#E31837,#ff4d6a)}
+  .bar-grn{background:linear-gradient(90deg,#5fad35,#76C043)}
+  .bpct{font-size:.72rem;font-weight:700;white-space:nowrap;min-width:52px;text-align:right;padding-right:8px}
+  .tipwrap{position:relative;cursor:default;display:flex;align-items:center;flex:1;height:100%}
+  .tipwrap.neg{justify-content:flex-end}
+  .tip{display:none;position:absolute;background:#1a1a1a;color:#fff;padding:6px 10px;border-radius:6px;font-size:.72rem;white-space:nowrap;z-index:200;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);box-shadow:0 2px 8px rgba(0,0,0,.3);pointer-events:none}
+  .tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a1a1a}
+  .tipwrap:hover .tip{display:block}
+  @media(max-width:900px){.irow4,.krow,.crow{grid-template-columns:1fr}.br{grid-template-columns:130px 1fr}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="h1">&#128202; April 2026 &#8212; Navigation Deep Dive</div>
+      <div class="hsub">Dept Nav + Sub Nav &middot; App vs rWeb &middot; MoM vs March 2026</div>
+    </div>
+    <div class="hbadge">Site Content Strategy &amp; BAI</div>
+  </div>
+  <div class="ybar"></div>
+</div>
+<div class="page">
+
+<!-- ═══════════════════════════════════════ -->
+<!-- AGENDA                                -->
+<!-- ═══════════════════════════════════════ -->
+<div style="margin-bottom:20px">
+  <div style="font-weight:800;font-size:.95rem;color:#1a1a1a;margin-bottom:8px">📑 Agenda</div>
+  <ol style="margin:0;padding-left:22px;font-size:.85rem;line-height:2;color:#333">
+    <li>Overall Navigation Metrics</li>
+    <li>Key Insights</li>
+    <li>Department Nav</li>
+    <li>Sub Nav</li>
+    <li>New Dept L0 Tests</li>
+  </ol>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- OVERALL NAV KPIs                      -->
+<!-- ═══════════════════════════════════════ -->
+<div class="stitle" style="color:#1a1a1a">📋 Overall Navigation Metrics</div>
+<div class="ssub">April vs March 2026</div>
+<div class="krow">
+  <div class="kpanel">
+    <div class="khdr" style="border-left:4px solid #0071CE"><div>
+      <div style="font-weight:700;font-size:.95rem">Dept Nav</div>
+      <div style="font-size:.76rem;color:#666">April clicks: <strong>13.02M</strong> (<span style="color:#E31837">-3.8%</span> MoM) · Exit Rate: 16.5% (+0.2pp)</div>
+    </div></div>
+    <div class="kgrid">
+      <div class="kc"><div class="kl">Clicks</div><div class="kv">13.02M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-3.8%</span></div>
+      <div class="kc"><div class="kl">Attr. ATC</div><div class="kv">11.66M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-8.7%</span></div>
+      <div class="kc"><div class="kl">Units Ordered</div><div class="kv">3.84M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-8.9%</span></div>
+      <div class="kc"><div class="kl">Attr. GMV</div><div class="kv">$22.50M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-8.5%</span></div>
+    </div>
+  </div>
+  <div class="kpanel">
+    <div class="khdr" style="border-left:4px solid #FFC220"><div>
+      <div style="font-weight:700;font-size:.95rem">Sub Nav</div>
+      <div style="font-size:.76rem;color:#666">April clicks: <strong>5.99M</strong> (<span style="color:#E31837">-8.0%</span> MoM) · Exit Rate: 25.3% (+4.92pp)</div>
+    </div></div>
+    <div class="kgrid">
+      <div class="kc"><div class="kl">Clicks</div><div class="kv">5.99M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-8.0%</span></div>
+      <div class="kc"><div class="kl">Attr. ATC</div><div class="kv">1.56M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-37%</span></div>
+      <div class="kc"><div class="kl">Units Ordered</div><div class="kv">419K</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-26.2%</span></div>
+      <div class="kc"><div class="kl">Attr. GMV</div><div class="kv">$3.46M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-8.5%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- KEY INSIGHTS                          -->
+<!-- ═══════════════════════════════════════ -->
+<div class="stitle" style="color:#1a1a1a;margin-top:24px">🔍 Key Insights</div>
+<div class="ssub">April 2026 · Combined App + rWeb</div>
+<div style="background:#fff;border-radius:12px;padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1px solid #e8eaed">
+
+<!-- Sitewide Traffic Context blended into Key Insights -->
+<div style="font-weight:800;font-size:.9rem;color:#1a1a1a;margin-bottom:10px">📉 Sitewide Traffic Context</div>
+<div style="font-size:.82rem;color:#666;margin-bottom:12px">April saw a sitewide traffic pullback — the backdrop for everything below</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+  <div class="icard" style="border-top:3px solid #E31837">
+    <div style="font-size:.73rem;color:#888;margin-bottom:4px">Sitewide Sessions</div>
+    <div style="font-size:1.3rem;font-weight:800">1.41B</div>
+    <div style="font-size:.8rem;color:#E31837;font-weight:600">▼ -2.6% MoM</div>
+  </div>
+  <div class="icard" style="border-top:3px solid #E31837">
+    <div style="font-size:.73rem;color:#888;margin-bottom:4px">Sitewide ATC</div>
+    <div style="font-size:1.3rem;font-weight:800">2.15B</div>
+    <div style="font-size:.8rem;color:#E31837;font-weight:600">▼ -5.2% MoM</div>
+  </div>
+  <div class="icard" style="border-top:3px solid #E31837">
+    <div style="font-size:.73rem;color:#888;margin-bottom:4px">Sitewide GMV</div>
+    <div style="font-size:1.3rem;font-weight:800">$8.31B</div>
+    <div style="font-size:.8rem;color:#E31837;font-weight:600">▼ -5.6% MoM</div>
+  </div>
+</div>
+
+<ul style="padding:0;margin:0;list-style:none">
+<li style="font-size:.88rem;line-height:1.7;color:#333;padding:10px 0;border-bottom:1px solid #f0f2f5"><strong>Traffic drove most of the decline — Nav engagement held steady.</strong> Total Nav clicks fell -3.8% MoM, but sitewide traffic was down <strong>2.6%</strong>. That means most of the drop was simply fewer people visiting — not fewer people engaging with Nav. Out of every 1,000 visitors, roughly 23 clicked into Nav in both March and April. The engagement rate barely moved.</li>
+<li style="font-size:.88rem;line-height:1.7;color:#333;padding:10px 0;border-bottom:1px solid #f0f2f5"><strong>Customers are shifting from winter to spring — and Nav should follow.</strong> The three department entries that showed strong April growth all point in the same direction: <strong>Party Supplies</strong> (<span style="color:#76C043">+11.5%</span>), <strong>Sports &amp; Outdoors</strong> (<span style="color:#76C043">+4.7%</span>), and <strong>Patio &amp; Garden</strong> (<span style="color:#76C043">+3.1%</span>) within Home Garden Tools. Meanwhile, winter-heavy categories like <strong>Clothing</strong> (<span style="color:#E31837">-12.6%</span>) and indoor Home L1s are naturally pulling back. <strong>May strategy:</strong> lean into summer L1s (swimwear, sandals, outdoor furniture), graduation gifting, Mother's Day, and Memorial Day.</li>
+<li style="font-size:.88rem;line-height:1.7;color:#333;padding:10px 0"><strong>Sub Nav click decline is driven by seasonal pill swaps, not broad erosion.</strong> Removing the <strong>Easter pill</strong> — which drove massive click volume in March — created the single largest drop in Sub Nav. We also swapped <strong>Dinner Made Easy → Meals Made Easy</strong>, broadening from one meal occasion to all meals positioning — but the pill did not resonate with customers. Those two changes alone explain the bulk of the shortfall. The remaining legacy pills — Rollbacks & More, Walmart+, New Arrivals, My Items, Credit Card, Pharmacy, and Only at Walmart — were roughly flat. We're currently running a <strong>Mother's Day</strong> seasonal pill and expect it to pull Sub Nav clicks back up through May.</li>
+</ul>
+</div>
+
+<!-- APRIL CAVEATS (after adjusted index) -->
+<div style="background:#fffbe6;border-radius:10px;padding:14px 18px;margin-bottom:6px;border:1px solid #FFC22044;border-left:4px solid #FFC220">
+  <div style="font-weight:700;font-size:.85rem;color:#b8860b;margin-bottom:6px">⚠️ April Caveats &amp; Business Context</div>
+  <ul style="font-size:.82rem;line-height:1.75;color:#555;padding-left:18px;margin:0">
+    <li><strong>Easter</strong> — Only a few days fell in April. March had the full seasonal window, creating tough comps across Dept Nav and Sub Nav.</li>
+    <li><strong>Mother’s Day</strong> — Flipped into Dept Nav on <strong>April 5</strong>. N/A MoM. Already generating 343K App / 291K rWeb Sub Nav clicks.</li>
+    <li><strong>Collectibles</strong> — New Dept L0 test launched <strong>April 15</strong>. Early engagement is low (9.1K App clicks, 0.09% share, Exit Rate 50.9%). Category is too granular for an L0 entry point.</li>
+    <li><strong>Walmart Business</strong> — In test as a Dept L0 since <strong>April 15</strong>. Only 50% of traffic seeing it. Not reflected in full-month metrics.</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- DEPT NAV SECTION                      -->
+<!-- ═══════════════════════════════════════ -->
+<div class="divider"></div>
+<div style="background:linear-gradient(135deg,#0071CE15,#0071CE08);border-radius:12px;padding:20px 24px;margin-bottom:16px;border-left:5px solid #0071CE">
+  <div style="font-size:1.4rem;font-weight:800;color:#0071CE;margin-bottom:4px">📂 Dept Nav</div>
+  <div style="font-size:.85rem;color:#555">Broad-based decline — 15 of 18 App L0s and 15 of 18 rWeb L0s lost clicks MoM</div>
+</div>
+
+<!-- App Dept Nav Bar Chart -->
+<div class="crow">
+<div class="card" style="border-left:4px solid #0071CE">
+<div class="ctitle">📱 App — Dept Nav L0 Click MoM %</div>
+<div class="csub">Sorted worst → best · Hover for detail · ◀ Red = decline · Green = growth ▶</div>
+<div class="barchart">
+<div class="br"><div class="bpct" style="color:#E31837">-17.8%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:100%"></div><div class="tip">Clicks -14.5K · GMV -24.7%</div></div><div class="bl">Gaming</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-17.0%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:96%"></div><div class="tip">Clicks -57K · GMV -12.2%</div></div><div class="bl">Baby Kids</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-16.1%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:90%"></div><div class="tip">Clicks -53.9K · GMV -19.1%</div></div><div class="bl">Electronics</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-13.2%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:74%"></div><div class="tip">Clicks -76.1K · GMV -19.3%</div></div><div class="bl">Rollbacks More</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-12.6%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:71%"></div><div class="tip">Clicks -207K · GMV -11.3%</div></div><div class="bl">Clothing Shoes</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-10.1%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:57%"></div><div class="tip">Clicks -4.9K · GMV -7.0%</div></div><div class="bl">Books Movies</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-9.9%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:56%"></div><div class="tip">Clicks -18K · GMV -13.4%</div></div><div class="bl">Toys Outdoor</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-9.6%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:54%"></div><div class="tip">Clicks -10K · GMV -18.2%</div></div><div class="bl">School Office</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-5.9%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:33%"></div><div class="tip">Clicks -10.2K · GMV -8.1%</div></div><div class="bl">HH Essentials</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-5.5%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:31%"></div><div class="tip">Clicks -16.5K · GMV -8.8%</div></div><div class="bl">Auto Tires</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-4.6%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:26%"></div><div class="tip">Clicks -8K · GMV -6.3%</div></div><div class="bl">Beauty</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-4.4%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:25%"></div><div class="tip">Clicks -10.8K · GMV -10.0%</div></div><div class="bl">Personal Care</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-3.5%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:20%"></div><div class="tip">Clicks -3.7K · GMV -4.3%</div></div><div class="bl">Pets</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-3.4%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:19%"></div><div class="tip">Clicks -23.7K · GMV -3.4%</div></div><div class="bl">Home Garden</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-2.3%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:13%"></div><div class="tip">Clicks -101.6K · GMV -12.3%</div></div><div class="bl">Grocery</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct"></div><div class="tipwrap neg" style="flex:1"></div><div class="bl">Pharmacy Health</div><div class="tipwrap"><div class="bar bar-grn" style="width:7%"></div><div class="tip">Clicks +6.8K · GMV -17.0%</div></div><div class="bpct-left" style="color:#76C043">+0.8%</div></div>
+<div class="br"><div class="bpct"></div><div class="tipwrap neg" style="flex:1"></div><div class="bl">Sports Outdoors</div><div class="tipwrap"><div class="bar bar-grn" style="width:40%"></div><div class="tip">Clicks +4.8K · GMV +14.7%</div></div><div class="bpct-left" style="color:#76C043">+4.7%</div></div>
+<div class="br"><div class="bpct"></div><div class="tipwrap neg" style="flex:1"></div><div class="bl">Party Supplies</div><div class="tipwrap"><div class="bar bar-grn" style="width:65%"></div><div class="tip">Clicks +4.7K · GMV +8.7%</div></div><div class="bpct-left" style="color:#76C043">+11.5%</div></div>
+</div>
+</div>
+
+<!-- rWeb Dept Nav Bar Chart -->
+<div class="card" style="border-left:4px solid #0071CE">
+<div class="ctitle">🌐 rWeb — Dept Nav L0 Click MoM %</div>
+<div class="csub">Sorted worst → best · Hover for detail · ◀ Red = decline · Green = growth ▶</div>
+<div class="barchart">
+<div class="br"><div class="bpct" style="color:#E31837">-15.9%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:100%"></div><div class="tip">Clicks -4.2K · GMV -21.7%</div></div><div class="bl">Gaming</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-14.8%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:93%"></div><div class="tip">Clicks -11.1K · GMV -18.8%</div></div><div class="bl">Baby Kids</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-11.6%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:73%"></div><div class="tip">Clicks -22.1K · GMV +9.6%</div></div><div class="bl">Electronics</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-11.2%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:70%"></div><div class="tip">Clicks -53.5K · GMV -13.1%</div></div><div class="bl">Clothing Shoes</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-10.7%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:67%"></div><div class="tip">Clicks -4.7K · GMV -8.3%</div></div><div class="bl">Toys Outdoor</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-9.5%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:60%"></div><div class="tip">Clicks -3K · GMV -13.4%</div></div><div class="bl">School Office</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-9.3%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:59%"></div><div class="tip">Clicks -1.7K · GMV -6.5%</div></div><div class="bl">Books Movies</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-8.8%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:55%"></div><div class="tip">Clicks -4.4K · GMV -2.6%</div></div><div class="bl">HH Essentials</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-8.1%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:51%"></div><div class="tip">Clicks -13.2K · GMV -10.7%</div></div><div class="bl">Rollbacks More</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-7.7%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:48%"></div><div class="tip">Clicks -3.2K · GMV -11.1%</div></div><div class="bl">Pets</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-7.6%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:48%"></div><div class="tip">Clicks -20.8K · GMV -9.6%</div></div><div class="bl">Pharmacy Health</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-7.0%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:44%"></div><div class="tip">Clicks -4.1K · GMV -6.9%</div></div><div class="bl">Personal Care</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-6.7%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:42%"></div><div class="tip">Clicks -9.8K · GMV -10.1%</div></div><div class="bl">Auto Tires</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-6.7%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:42%"></div><div class="tip">Clicks -2.9K · GMV -12.0%</div></div><div class="bl">Beauty</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-6.2%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:39%"></div><div class="tip">Clicks -68.2K · GMV -7.1%</div></div><div class="bl">Grocery</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct"></div><div class="tipwrap neg" style="flex:1"></div><div class="bl">Home Garden</div><div class="tipwrap"><div class="bar bar-grn" style="width:24%"></div><div class="tip">Clicks +10.3K · GMV -2.4%</div></div><div class="bpct-left" style="color:#76C043">+3.6%</div></div>
+<div class="br"><div class="bpct"></div><div class="tipwrap neg" style="flex:1"></div><div class="bl">Sports Outdoors</div><div class="tipwrap"><div class="bar bar-grn" style="width:29%"></div><div class="tip">Clicks +2.1K · GMV +40.5%</div></div><div class="bpct-left" style="color:#76C043">+4.3%</div></div>
+<div class="br"><div class="bpct"></div><div class="tipwrap neg" style="flex:1"></div><div class="bl">Party Supplies</div><div class="tipwrap"><div class="bar bar-grn" style="width:100%"></div><div class="tip">Clicks +1.6K · GMV +1.6%</div></div><div class="bpct-left" style="color:#76C043">+15.0%</div></div>
+</div>
+</div>
+</div>
+
+<!-- Grocery Panel -->
+<div class="krow">
+  <div class="kpanel" style="border-left:4px solid #0071CE">
+    <div class="khdr"><div><div style="font-weight:700;font-size:.95rem">App — Grocery (Top L0 by Volume)</div><div style="font-size:.76rem;color:#666">43.5% of all App Dept Nav clicks · GMV/Click: $2.21</div></div></div>
+    <div class="kgrid">
+      <div class="kc"><div class="kl">Clicks</div><div class="kv">4.39M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-2.3%</span></div>
+      <div class="kc"><div class="kl">Attr. ATC</div><div class="kv">7.12M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-10.9%</span></div>
+      <div class="kc"><div class="kl">Attr. GMV</div><div class="kv">$9.73M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-12.3%</span></div>
+      <div class="kc"><div class="kl">Exit Rate</div><div class="kv">13.3%</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-384 bps</span></div>
+    </div>
+  </div>
+  <div class="kpanel" style="border-left:4px solid #0071CE">
+    <div class="khdr"><div><div style="font-weight:700;font-size:.95rem">rWeb — Grocery (Top L0 by Volume)</div><div style="font-size:.76rem;color:#666">35.9% of all rWeb Dept Nav clicks · GMV/Click: $3.00</div></div></div>
+    <div class="kgrid">
+      <div class="kc"><div class="kl">Clicks</div><div class="kv">1.03M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-6.2%</span></div>
+      <div class="kc"><div class="kl">Attr. ATC</div><div class="kv">1.75M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-6.4%</span></div>
+      <div class="kc"><div class="kl">Attr. GMV</div><div class="kv">$3.08M</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-7.1%</span></div>
+      <div class="kc"><div class="kl">Exit Rate</div><div class="kv">11.3%</div><span class="badge" style="background:#fde8ec;color:#E31837;border:1px solid #E3183733">-24 bps</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════ -->
+<!-- FOCUS: CUSTOMER INTEREST SHIFTS       -->
+<!-- ═══════════════════════════════════════ -->
+<div class="stitle" style="color:#0071CE;margin-top:24px">📍 Focus: Customer Interest Shifts — The Spring Rotation</div>
+
+<div style="background:linear-gradient(135deg,#EEF6FF,#f0f4ff);border-radius:12px;padding:20px 24px;margin-bottom:16px;border:1px solid #0071CE22;border-left:5px solid #0071CE">
+  <div style="font-size:1rem;font-weight:800;color:#1a1a1a;line-height:1.8">
+    One story connects the growers and decliners: customers are pivoting from <strong>winter / indoor</strong> to <strong>spring / outdoor</strong>.
+  </div>
+  <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-top:14px">
+    <div style="background:#f0faf3;border-radius:8px;padding:12px 16px;border:1px solid #76C04322">
+      <div style="font-size:.72rem;color:#76C043;font-weight:700;margin-bottom:4px">▲ SURGING</div>
+      <div style="font-size:.88rem;font-weight:700;color:#333;line-height:1.6">Party Supplies · Patio Garden · Spring Home Edit</div>
+    </div>
+    <div style="font-size:1.4rem;color:#999">⇄</div>
+    <div style="background:#fff5f5;border-radius:8px;padding:12px 16px;border:1px solid #E3183722">
+      <div style="font-size:.72rem;color:#E31837;font-weight:700;margin-bottom:4px">▼ FADING</div>
+      <div style="font-size:.88rem;font-weight:700;color:#333;line-height:1.6">Clothing winter L1s · Indoor Home · Easter demand</div>
+    </div>
+  </div>
+</div>
+
+<!-- The Signal: What's Growing and Why -->
+<div class="card" style="margin-bottom:14px;border-left:4px solid #0071CE">
+  <div class="ctitle">📈 The Signal: Where Customer Interest Is Moving</div>
+  <div class="csub">Party Supplies (+11.5% App, +15.0% rWeb) is the clearest demand signal — it tells us what customers are planning for</div>
+  <div style="margin-top:12px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px">
+      <div style="background:#EEF6FF;border-radius:8px;padding:14px 16px;border:1px solid #0071CE22;text-align:center">
+        <div style="font-size:1.6rem;font-weight:800;color:#333">🎓</div>
+        <div style="font-size:.82rem;font-weight:700;color:#333;margin-top:4px">Graduation Prep</div>
+        <div style="font-size:.75rem;color:#666;margin-top:3px">Party planning peaks in April — decorations, tableware, banners driving early intent</div>
+      </div>
+      <div style="background:#EEF6FF;border-radius:8px;padding:14px 16px;border:1px solid #0071CE22;text-align:center">
+        <div style="font-size:1.6rem;font-weight:800;color:#333">💐</div>
+        <div style="font-size:.82rem;font-weight:700;color:#333;margin-top:4px">Mother's Day Prep</div>
+        <div style="font-size:.75rem;color:#666;margin-top:3px">Flipped into Nav Apr 5 — brunch decor, gift wrap, entertaining supplies cross-pollinating</div>
+      </div>
+      <div style="background:#EEF6FF;border-radius:8px;padding:14px 16px;border:1px solid #0071CE22;text-align:center">
+        <div style="font-size:1.6rem;font-weight:800;color:#333">☀️</div>
+        <div style="font-size:.82rem;font-weight:700;color:#333;margin-top:4px">Outdoor Entertaining</div>
+        <div style="font-size:.75rem;color:#666;margin-top:3px">Warming weather driving backyard BBQ, patio dining, and outdoor party supply demand</div>
+      </div>
+    </div>
+    <div style="font-size:.85rem;color:#333;line-height:1.7;padding:12px 16px;background:#f8f9fb;border-radius:8px;border:1px solid #e8eaed">
+      This same outdoor rotation is visible across L0s: <strong>Party Supplies</strong> grew +11.5% App / +15.0% rWeb · <strong>Sports Outdoors</strong> grew +4.7% App / +4.3% rWeb · <strong>Home Garden Tools</strong> outperformed at only -3.4% App (vs -5.8% avg) with rWeb <em>growing</em> +3.6%. Within HGT, the outdoor L1s confirm it: <strong>All Patio Garden</strong> +3.1% clicks, +25.1% GMV · <strong>Spring Home Edit</strong> +29.7% clicks, +301% GMV.
+    </div>
+  </div>
+</div>
+
+<!-- What's Declining and Why -->
+<div class="card" style="margin-bottom:14px;border-left:4px solid #0071CE">
+  <div class="ctitle">📉 The Flip Side: Winter / Indoor Categories</div>
+  <div class="csub">The biggest click losses are concentrated in winter L1s across Clothing (-207K App clicks) and indoor Home categories</div>
+  <div style="margin-top:12px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:#EEF6FF;border-radius:8px;padding:14px 18px;border:1px solid #0071CE22">
+        <div style="font-weight:700;color:#0071CE;font-size:.85rem;margin-bottom:6px">👗 Clothing, Shoes and Accessories (<span style="font-size:.78rem;color:#E31837">-12.6% App, -11.2% rWeb</span>)</div>
+        <div style="font-size:.83rem;color:#333;line-height:1.8">
+          The <strong>single largest absolute click loss</strong> in Nav: -207K App / -53.5K rWeb. The decline is driven by winter collection L1s winding down — Easter dresses &amp; formalwear (March peak gone), outerwear &amp; jackets, boots &amp; cold-weather footwear, and kids' clothing (post-Easter gap). Summer L1s (swimwear, sandals, active) haven't ramped enough to offset yet.
+        </div>
+      </div>
+      <div style="background:#EEF6FF;border-radius:8px;padding:14px 18px;border:1px solid #0071CE22">
+        <div style="font-weight:700;color:#0071CE;font-size:.85rem;margin-bottom:6px">🏠 Indoor Home L1s (<span style="font-size:.78rem;color:#E31837">Home Garden Tools post-winter normalization</span>)</div>
+        <div style="font-size:.83rem;color:#333;line-height:1.8">
+          Four indoor L1s account for the Home Garden Tools decline: <strong>Home Decor</strong> -9.5K clicks (-12.6%), <strong>Kitchen Dining</strong> -7.7K (-9.0%), <strong>Furniture</strong> -5.2K (-6.1%), <strong>Bedding</strong> -3.2K (-7.5%). Post-winter refresh and indoor entertaining demand fading as customers shift attention outdoors.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- May Strategy Recommendation -->
+<div class="card" style="margin-bottom:14px;border-left:4px solid #0071CE">
+  <div class="ctitle">🎯 May Strategy: Lean Into the Rotation</div>
+  <div class="csub">The data tells us where customers are heading — May content and Nav strategy should follow</div>
+  <div style="margin-top:12px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px">
+      <div style="background:#EEF6FF;border-radius:8px;padding:14px 16px;border:1px solid #0071CE22">
+        <div style="font-weight:700;color:#0071CE;font-size:.82rem;margin-bottom:4px">☀️ Summer L1 Elevation</div>
+        <div style="font-size:.78rem;color:#333;line-height:1.6">Swimwear, sandals, active apparel, outdoor furniture — accelerate positioning in Clothing &amp; Home Garden Tools Nav to capture the seasonal shift</div>
+      </div>
+      <div style="background:#EEF6FF;border-radius:8px;padding:14px 16px;border:1px solid #0071CE22">
+        <div style="font-weight:700;color:#0071CE;font-size:.82rem;margin-bottom:4px">💐 Mother's Day Gifting</div>
+        <div style="font-size:.78rem;color:#333;line-height:1.6">Clothing is a core gift category — expect mid-May lift. Cross-promote gifting L1s across Clothing, Beauty, Home Garden Tools</div>
+      </div>
+      <div style="background:#EEF6FF;border-radius:8px;padding:14px 16px;border:1px solid #0071CE22">
+        <div style="font-weight:700;color:#0071CE;font-size:.82rem;margin-bottom:4px">🎓 Grad Party Supplies</div>
+        <div style="font-size:.78rem;color:#333;line-height:1.6">April was early intent — May is the buying peak. Grad bundles and cross-L0 linking (Party → Grocery → Electronics) should maximize basket</div>
+      </div>
+      <div style="background:#EEF6FF;border-radius:8px;padding:14px 16px;border:1px solid #0071CE22">
+        <div style="font-weight:700;color:#0071CE;font-size:.82rem;margin-bottom:4px">🌴 Memorial Day Ramp</div>
+        <div style="font-size:.78rem;color:#333;line-height:1.6">Outdoor entertaining, Patio Garden, Swim Shop, Sports Outdoors should all accelerate — front-load Nav positioning</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SUB NAV SECTION                       -->
+<!-- ═══════════════════════════════════════ -->
+<div class="divider"></div>
+<div style="background:linear-gradient(135deg,#FFC22018,#FFC22008);border-radius:12px;padding:24px 28px;margin-bottom:16px;border-left:5px solid #FFC220">
+  <div style="font-size:1.4rem;font-weight:800;color:#b8860b;margin-bottom:12px">🗒️ Sub Nav</div>
+  <div style="font-size:.88rem;line-height:1.7;color:#444">
+    Sub Nav clicks fell <strong>-8.0% MoM</strong> (-218K App / -230K rWeb). The headline ATC drop of <span style="color:#E31837;font-weight:600">-37%</span> was driven by <strong>seasonality and traffic drop</strong>. Exit rate climbed to <strong>25.3%</strong> (+4.92pp) — partially driven by new low-volume pills with higher browse-to-exit ratios.
+  </div>
+</div>
+
+<!-- Legacy Sub Nav Bar Charts -->
+<div style="font-weight:700;font-size:.92rem;color:#333;margin-bottom:10px">📦 Legacy Sub Nav Pills — MoM % Change</div>
+<div class="crow">
+<div class="card" style="border-left:4px solid #FFC220">
+<div class="ctitle">📱 App — Legacy Pills Click MoM %</div>
+<div class="csub">Excludes seasonal / new pills · Sorted worst → best · ◀ Red = decline · Green = growth ▶</div>
+<div class="barchart">
+<div class="br"><div class="bpct" style="color:#E31837">-66.5%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:100%"></div><div class="tip">-315K clicks · ATC -104K</div></div><div class="bl">Get It Fast</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-12.9%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:19%"></div><div class="tip">-13.4K clicks</div></div><div class="bl">Only at Walmart</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-11.8%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:18%"></div><div class="tip">-57.2K clicks</div></div><div class="bl">Pharmacy</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-9.5%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:14%"></div><div class="tip">-33.1K clicks</div></div><div class="bl">My Items</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-9.3%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:14%"></div><div class="tip">-6.7K clicks</div></div><div class="bl">Credit Card</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-8.5%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:13%"></div><div class="tip">-15.1K clicks</div></div><div class="bl">New Arrivals</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-6.6%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:10%"></div><div class="tip">-20.7K clicks</div></div><div class="bl">Walmart+</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct"></div><div class="tipwrap neg" style="flex:1"></div><div class="bl">Rollbacks More</div><div class="tipwrap"><div class="bar bar-grn" style="width:15%"></div><div class="tip">+106.4K clicks · Only grower</div></div><div class="bpct-left" style="color:#76C043">+10.1%</div></div>
+</div>
+</div>
+<div class="card" style="border-left:4px solid #FFC220">
+<div class="ctitle">🌐 rWeb — Legacy Pills Click MoM %</div>
+<div class="csub">Excludes seasonal / new pills · Sorted worst → best · ◀ Red = decline · Green = growth ▶</div>
+<div class="barchart">
+<div class="br"><div class="bpct" style="color:#E31837">-31.1%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:100%"></div><div class="tip">-102.7K clicks · ATC -72.5K</div></div><div class="bl">Get It Fast</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-13.8%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:44%"></div><div class="tip">-34.6K clicks</div></div><div class="bl">Pharmacy</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-11.2%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:36%"></div><div class="tip">-27.7K clicks</div></div><div class="bl">My Items</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-11.2%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:36%"></div><div class="tip">-6.3K clicks</div></div><div class="bl">Credit Card</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-10.5%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:34%"></div><div class="tip">-8.7K clicks</div></div><div class="bl">Only at Walmart</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-10.0%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:32%"></div><div class="tip">-25.3K clicks</div></div><div class="bl">New Arrivals</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct" style="color:#E31837">-8.1%</div><div class="tipwrap neg"><div class="bar bar-red" style="width:26%"></div><div class="tip">-24.7K clicks</div></div><div class="bl">Walmart+</div><div class="tipwrap" style="flex:1"></div><div class="bpct-left"></div></div>
+<div class="br"><div class="bpct"></div><div class="tipwrap neg" style="flex:1"></div><div class="bl">Rollbacks More</div><div class="tipwrap"><div class="bar bar-grn" style="width:11%"></div><div class="tip">+18.1K clicks · Only grower</div></div><div class="bpct-left" style="color:#76C043">+3.5%</div></div>
+</div>
+</div>
+</div>
+
+<!-- Seasonal & New Categories -->
+<div style="font-weight:700;font-size:.92rem;color:#333;margin-bottom:10px;margin-top:24px">🌸 Seasonal &amp; New Sub Nav Pills</div>
+<div style="background:#fff;border-radius:12px;padding:18px 24px;margin-bottom:16px;border:1px solid #e8eaed;border-left:4px solid #FFC220">
+  <div style="font-size:.88rem;line-height:1.75;color:#333">
+    <strong>Mother's Day</strong> launched as a Sub Nav pill tied to the Dept L0 flip on April 5 — already the <strong>3rd largest pill</strong> on App (343K clicks) and <strong>2nd largest</strong> on rWeb (291K). GMV/Click is $0.22 App / $0.69 rWeb — expected for a gifting-browse category.
+    <br><br>
+    <strong>Meals Made Easy</strong> replaced Dinner Made Easy — but total clicks (126K App, 124K rWeb) and GMV were significantly lower than last month. From an <strong>efficiency standpoint</strong>, GMV/Click was strong at <strong>$1.22 on App</strong> and <strong>$1.17 on rWeb</strong> — the highest of any Sub Nav pill.
+    <br><br>
+    <strong>ARIH</strong> underperformed significantly — only 3.7K App clicks with a <strong>56.2% exit rate</strong> (vs 25.3% Sub Nav avg) and $0.07 GMV/Click. On rWeb it fared slightly better at 10.2K clicks but still carried a 48.1% exit rate. The pill did not resonate with customers and we removed it early.
+    <br><br>
+    <strong>Spring Home</strong> drove 17.3K App clicks and 43.4K rWeb clicks with a healthier exit rate (37.2% App / 31.3% rWeb), though GMV/Click remains modest ($0.22 App / $0.58 rWeb).
+  </div>
+</div>
+
+<div class="crow">
+<div class="card" style="border-left:4px solid #FFC220">
+<div class="ctitle">📱 App — Seasonal &amp; New Pills</div>
+<div class="csub">April 2026</div>
+<table style="width:100%;border-collapse:collapse;font-size:.82rem;margin-top:12px">
+  <thead><tr style="background:#f8f9fa;border-bottom:2px solid #e8eaed">
+    <th style="text-align:left;padding:10px 12px;font-weight:700">Category</th>
+    <th style="text-align:right;padding:10px 12px;font-weight:700">Clicks</th>
+    <th style="text-align:right;padding:10px 12px;font-weight:700">GMV</th>
+    <th style="text-align:right;padding:10px 12px;font-weight:700">GMV/Click</th>
+  </tr></thead>
+  <tbody>
+    <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 12px;font-weight:600">💐 Mother's Day</td><td style="padding:10px 12px;text-align:right">343K</td><td style="padding:10px 12px;text-align:right">$75.2K</td><td style="padding:10px 12px;text-align:right">$0.22</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5;background:#fafafa"><td style="padding:10px 12px;font-weight:600">🍽️ Meals Made Easy</td><td style="padding:10px 12px;text-align:right">126K</td><td style="padding:10px 12px;text-align:right">$154.1K</td><td style="padding:10px 12px;text-align:right;color:#76C043;font-weight:700">$1.22</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 12px;font-weight:600">🐰 Easter</td><td style="padding:10px 12px;text-align:right">119K</td><td style="padding:10px 12px;text-align:right">$169.7K</td><td style="padding:10px 12px;text-align:right">$1.43</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5;background:#fafafa"><td style="padding:10px 12px;font-weight:600">🌿 Patio Garden</td><td style="padding:10px 12px;text-align:right">31K</td><td style="padding:10px 12px;text-align:right">$14.1K</td><td style="padding:10px 12px;text-align:right">$0.46</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 12px;font-weight:600">🏊 Swim Shop</td><td style="padding:10px 12px;text-align:right">17K</td><td style="padding:10px 12px;text-align:right">$6.8K</td><td style="padding:10px 12px;text-align:right">$0.41</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5;background:#fafafa"><td style="padding:10px 12px;font-weight:600">🥦 Bettergoods</td><td style="padding:10px 12px;text-align:right">10K</td><td style="padding:10px 12px;text-align:right">$9.1K</td><td style="padding:10px 12px;text-align:right;color:#76C043;font-weight:700">$0.91</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 12px;font-weight:600">👶 Spring Baby Event</td><td style="padding:10px 12px;text-align:right">10K</td><td style="padding:10px 12px;text-align:right">$4.7K</td><td style="padding:10px 12px;text-align:right">$0.48</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5;background:#fafafa"><td style="padding:10px 12px;font-weight:600">🤧 Allergy Essentials</td><td style="padding:10px 12px;text-align:right">2.1K</td><td style="padding:10px 12px;text-align:right">$2.1K</td><td style="padding:10px 12px;text-align:right;color:#76C043;font-weight:700">$0.98</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 12px;font-weight:600">🏡 Spring Home</td><td style="padding:10px 12px;text-align:right">17.3K</td><td style="padding:10px 12px;text-align:right">$3.8K</td><td style="padding:10px 12px;text-align:right">$0.22</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5;background:#fafafa"><td style="padding:10px 12px;font-weight:600">🏠 ARIH</td><td style="padding:10px 12px;text-align:right;color:#E31837">3.7K</td><td style="padding:10px 12px;text-align:right;color:#E31837">$265</td><td style="padding:10px 12px;text-align:right;color:#E31837">$0.07</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="card" style="border-left:4px solid #FFC220">
+<div class="ctitle">🌐 rWeb — Seasonal &amp; New Pills</div>
+<div class="csub">April 2026</div>
+<table style="width:100%;border-collapse:collapse;font-size:.82rem;margin-top:12px">
+  <thead><tr style="background:#f8f9fa;border-bottom:2px solid #e8eaed">
+    <th style="text-align:left;padding:10px 12px;font-weight:700">Category</th>
+    <th style="text-align:right;padding:10px 12px;font-weight:700">Clicks</th>
+    <th style="text-align:right;padding:10px 12px;font-weight:700">GMV</th>
+    <th style="text-align:right;padding:10px 12px;font-weight:700">GMV/Click</th>
+  </tr></thead>
+  <tbody>
+    <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 12px;font-weight:600">💐 Mother's Day</td><td style="padding:10px 12px;text-align:right">291K</td><td style="padding:10px 12px;text-align:right">$199.7K</td><td style="padding:10px 12px;text-align:right">$0.69</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5;background:#fafafa"><td style="padding:10px 12px;font-weight:600">🍽️ Meals Made Easy</td><td style="padding:10px 12px;text-align:right">124K</td><td style="padding:10px 12px;text-align:right">$145.5K</td><td style="padding:10px 12px;text-align:right;color:#76C043;font-weight:700">$1.17</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 12px;font-weight:600">🐰 Easter</td><td style="padding:10px 12px;text-align:right">109K</td><td style="padding:10px 12px;text-align:right">$286.5K</td><td style="padding:10px 12px;text-align:right;color:#76C043;font-weight:700">$2.63</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5;background:#fafafa"><td style="padding:10px 12px;font-weight:600">🌿 Patio Garden</td><td style="padding:10px 12px;text-align:right">70K</td><td style="padding:10px 12px;text-align:right">$111.6K</td><td style="padding:10px 12px;text-align:right;color:#76C043;font-weight:700">$1.59</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 12px;font-weight:600">🏊 Swim Shop</td><td style="padding:10px 12px;text-align:right">38K</td><td style="padding:10px 12px;text-align:right">$33.8K</td><td style="padding:10px 12px;text-align:right">$0.88</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5;background:#fafafa"><td style="padding:10px 12px;font-weight:600">🥦 Bettergoods</td><td style="padding:10px 12px;text-align:right">23K</td><td style="padding:10px 12px;text-align:right">$18.5K</td><td style="padding:10px 12px;text-align:right;color:#76C043;font-weight:700">$0.81</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 12px;font-weight:600">👶 Spring Baby Event</td><td style="padding:10px 12px;text-align:right">18K</td><td style="padding:10px 12px;text-align:right">$17.6K</td><td style="padding:10px 12px;text-align:right;color:#76C043;font-weight:700">$0.98</td></tr>
+    <tr style="background:#fafafa"><td style="padding:10px 12px;font-weight:600">🤧 Allergy Essentials</td><td style="padding:10px 12px;text-align:right">10K</td><td style="padding:10px 12px;text-align:right">$12.5K</td><td style="padding:10px 12px;text-align:right;color:#76C043;font-weight:700">$1.26</td></tr>
+    <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 12px;font-weight:600">🏡 Spring Home</td><td style="padding:10px 12px;text-align:right">43.4K</td><td style="padding:10px 12px;text-align:right">$25.2K</td><td style="padding:10px 12px;text-align:right">$0.58</td></tr>
+    <tr style="background:#fafafa"><td style="padding:10px 12px;font-weight:600">🏠 ARIH</td><td style="padding:10px 12px;text-align:right;color:#E31837">10.2K</td><td style="padding:10px 12px;text-align:right;color:#E31837">$4.0K</td><td style="padding:10px 12px;text-align:right;color:#E31837">$0.39</td></tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+<!-- Sub Nav ATC Insight Callout -->
+<div style="background:#fff;border-radius:12px;padding:18px 24px;margin-bottom:16px;border:1px solid #e8eaed;border-left:4px solid #FFC220">
+  <div style="font-weight:800;font-size:.95rem;color:#b8860b;margin-bottom:8px">📉 Sub Nav ATC -37%: Driven by Seasonality and Traffic Drop</div>
+  <div style="font-size:.85rem;line-height:1.75;color:#333">
+    The headline ATC drop is driven by <strong>seasonality and traffic drop</strong>:
+    <br>· <strong>🐰 Easter wind-down</strong> accounted for ~637K lost ATC (full month Mar → few days Apr)
+    <br>· <strong>🍽️ Dinner Made Easy → Meals Made Easy</strong> swap cost ~225K ATC as the replacement ramps — ATC dipped from 250K to 322K and GMV dropped ~$100K
+    <br>· <strong>⚡ Get It Fast</strong> declined ~176K ATC from reduced engagement
+    <br><br>
+    These 3 transitions = <strong>~92% of the total ATC shortfall</strong>. The remaining legacy pills were approximately flat, and the sitewide traffic pullback (-2.6% sessions) further compressed pill volumes across the board.
+  </div>
+</div>
+
+
+<div class="divider"></div>
+<div style="background:linear-gradient(135deg,#f0faf308,#f0faf318);border-radius:12px;padding:20px 24px;margin-bottom:16px;border-left:5px solid #76C043">
+  <div style="font-size:1.4rem;font-weight:800;color:#16a34a;margin-bottom:4px">🧪 New Dept L0 Tests</div>
+  <div style="font-size:.85rem;color:#16a34a">Launched April 15 · Early performance signals from two taxonomy experiments</div>
+</div>
+
+<!-- Collectibles — Full Width -->
+<div class="card" style="border-left:3px solid #76C043;margin-bottom:14px">
+    <div class="ctitle">🏷️ Collectibles — L1 → L0 Promotion: More Clicks, Worse Conversion</div>
+    <div class="csub">Was an L1 under Toys Outdoor Play in March · Promoted to standalone L0 on Apr 15 · 16 days of data</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-top:8px">
+      <div class="kc"><div class="kl">App Clicks (Apr)</div><div class="kv" style="font-size:1.1rem">9.1K</div><div style="font-size:.72rem;color:#888">16 days as L0</div></div>
+      <div class="kc"><div class="kl">Exit Rate</div><div class="kv" style="font-size:1.1rem;color:#E31837">50.9%</div><div style="font-size:.72rem;color:#888">vs 31.9% as L1</div></div>
+      <div class="kc"><div class="kl">GMV/Click</div><div class="kv" style="font-size:1.1rem">$0.33</div><div style="font-size:.72rem;color:#888">vs $0.48 as L1</div></div>
+      <div class="kc"><div class="kl">Click Share</div><div class="kv" style="font-size:1.1rem">0.09%</div><div style="font-size:.72rem;color:#888">of Dept Nav</div></div>
+    </div>
+    <div style="background:#EEF6FF;border-radius:8px;padding:14px 18px;border:1px solid #0071CE22;margin-top:12px">
+      <div style="font-weight:700;color:#0071CE;font-size:.85rem;margin-bottom:8px">📊 Normalized Daily Comparison: L1 vs L0</div>
+      <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+        <thead><tr style="border-bottom:2px solid #e8eaed">
+          <th style="text-align:left;padding:8px 10px;font-weight:700">Metric</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700">Mar (as L1 under Toys) · 31 days</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700">Apr (as L0) · 16 days</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700">Δ</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f0f2f5">
+            <td style="padding:8px 10px;font-weight:600">App Clicks/Day</td>
+            <td style="padding:8px 10px;text-align:center">277/day</td>
+            <td style="padding:8px 10px;text-align:center;font-weight:700;color:#76C043">569/day</td>
+            <td style="padding:8px 10px;text-align:center;color:#76C043;font-weight:700">▲ 2.05×</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f2f5">
+            <td style="padding:8px 10px;font-weight:600">Exit Rate</td>
+            <td style="padding:8px 10px;text-align:center">31.9%</td>
+            <td style="padding:8px 10px;text-align:center;color:#E31837;font-weight:700">50.9%</td>
+            <td style="padding:8px 10px;text-align:center;color:#E31837">▲ +19pp</td>
+          </tr>
+          <tr style="background:#fafafa">
+            <td style="padding:8px 10px;font-weight:600">GMV/Click</td>
+            <td style="padding:8px 10px;text-align:center">$0.48</td>
+            <td style="padding:8px 10px;text-align:center;color:#E31837;font-weight:700">$0.33</td>
+            <td style="padding:8px 10px;text-align:center;color:#E31837">▼ -31%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:.82rem;color:#333;margin-top:12px;line-height:1.7;padding:10px 14px;background:#fff5f5;border-radius:8px;border:1px solid #E3183722">
+      <strong style="color:#16a34a">⚠️ Verdict:</strong> Promoting Collectibles to L0 <strong>doubled daily discoverability</strong> (277 → 569 clicks/day) — but conversion collapsed. Exit rate jumped from 31.9% to 50.9% (3× Nav avg) and GMV/Click dropped -31%. Users are clicking into it but finding the category too narrow for an L0 entry point. As an L1 under Toys, it performed better because users had already self-selected into browsing mode.
+    </div>
+</div>
+
+<!-- Walmart Business — Separate Full Width -->
+<div class="card" style="border-left:3px solid #76C043;margin-bottom:14px">
+    <div class="ctitle">🏢 Walmart Business</div>
+    <div class="csub">New L0 test · 50% traffic holdout · Apr 15–30</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+      <div style="background:#fffbe6;border-radius:8px;padding:14px 18px;border:1px solid #FFC22044">
+        <div style="font-weight:700;color:#b8860b;font-size:.85rem;margin-bottom:6px">🧪 A/B Test Design</div>
+        <div style="font-size:.83rem;color:#333;line-height:1.7">Only half of traffic is seeing Walmart Business as a Dept L0 — this is an A/B test design where the control group sees the standard Nav without it. This means April metrics represent only partial exposure and are <strong>not included</strong> in full-month Dept Nav totals above.</div>
+      </div>
+      <div style="background:#EEF6FF;border-radius:8px;padding:14px 18px;border:1px solid #0071CE22">
+        <div style="font-weight:700;color:#0071CE;font-size:.85rem;margin-bottom:6px">📅 What’s Next</div>
+        <div style="font-size:.83rem;color:#333;line-height:1.7">Full engagement data will be reported in the <strong>May MBR</strong> once we have a complete month of exposure at 50% holdout. Key metrics to watch: click share, exit rate vs Nav avg (16.5%), and GMV/Click vs the $1.45 L0 average.</div>
+      </div>
+    </div>
+</div>
+
+<div style="text-align:center;margin-top:28px;padding:14px;font-size:.72rem;color:#aaa">
+  April 2026 Navigation Deep Dive · Source: Apr_Nav_Data.xlsx · Generated May 5, 2026
+</div>
+</div>
+</body>
+</html>

@@ -1,9 +1,9 @@
 # MBR Knowledge Handoff — v5 (May 2026 Close)
 
-> **Canonical reference for the June 2026 MBR session.** Source: `mbr_handoffs/mbr-knowledge-handoff-v5-may-2026-close.html`
+> **Canonical reference for the June 2026 MBR session.** Source: `handoffs/mbr-knowledge-handoff-v5-may-2026-close.html`
 > Author: Fola 📝 · Generated 2026-06-10 · Supersedes handoff v4. Update to v6 at June MBR close.
 
-This digest is consumed by the **keel-mbr** agent. The full styled HTML lives in `mbr_handoffs/`.
+This digest is consumed by the **keel-mbr** agent. The full styled HTML lives in `handoffs/`.
 
 ---
 
