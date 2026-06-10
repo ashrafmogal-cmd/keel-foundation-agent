@@ -1,31 +1,29 @@
-# Keel-MBR Agent — Monthly Business Review Automation
+# Keel MBR — Monthly Business Review Automation (Built into Keel)
 
 ## Overview
-**keel-mbr** (display: *Keel MBR 📊*) is a specialist sub-agent that generates
-Monthly Business Review (MBR) reports for Walmart Homepage Analytics. It is built
-on top of the **Fola** agent's brain and is invoked by **Keel** when a user
-explicitly asks to run the MBR for a given month.
+MBR (Monthly Business Review) report generation is a **built-in capability of the Keel agent**.
+When a user explicitly asks to run the MBR for a given month, **Keel generates it directly** —
+no separate agent required. This keeps everything in one agent that ships together when Keel
+is published/updated.
 
-- **Lineage:** Keel (foundation) → Fola (report specialist) → keel-mbr (MBR automation)
+- **Lineage:** Knowledge originated from the Fola report agent; folded directly into Keel.
 - **Trigger:** Explicit only — "run the MBR for <Month> <Year>"
-- **Model:** claude-4-6-opus
-- **Location:** `~/.code_puppy/agents/keel-mbr.json`
+- **Model:** Keel's model (claude-4-6-opus)
+- **Backup agent:** `~/.code_puppy/agents/keel-mbr.json` is kept on disk as a standalone
+  backup but is NOT the primary path (Keel does MBRs itself).
 
 ## Architecture
 ```
 User → Keel: "run the MBR report for June 2026"
-         ↓ (explicit MBR intent)
-       Keel → invoke_agent("keel-mbr", "Run the MBR for June 2026")
-         ↓
-       keel-mbr: queries BigQuery live, drafts insights,
-                 asks user for non-BQ inputs, builds branded HTML
+         ↓ (Keel's built-in MBR capability — no handoff)
+       Keel: queries BigQuery live, drafts insights,
+             asks user for non-BQ inputs, builds branded HTML
          ↓
        Returns report path / share link → user iterates
 ```
 
-Unlike Fola (which delegates data pulls to other agents), **keel-mbr is
-self-sufficient**: it has its own BigQuery, file, shell, and universal_constructor
-tools so it can execute end-to-end without looping back to Keel.
+Keel has all tools needed (BigQuery, create_file/replace_in_file, shell,
+universal_constructor) to execute end-to-end.
 
 ## Month Parameterization
 When asked for `<Month> <Year>`:
